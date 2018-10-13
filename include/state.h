@@ -6,10 +6,10 @@
 
 using namespace std;
 
-class State{
+class State{ 
 public:
 	//boolean to tell whether each hand is initial or not
-	veector<bool> initial;
+	vector<bool> initial;
 	//vector of all my hands (could be more than 1 due to split)
 	vector< vector<int> > hands;
 	//dealer card we know

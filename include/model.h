@@ -12,7 +12,9 @@ public:
 	//function to get reward given state 
 	float get_reward(State& s);
 	//function returns a vector of states alongwith probabilities given current state and action
-	vector< pair<State,float> > next_States(State& currState, int action);
+	vector< pair<State,float> > next_States(State currState, int action);
+	//function returns a vector of actions for a possible state
+	vector<int> actions(State currState);
 };
 
 #endif
