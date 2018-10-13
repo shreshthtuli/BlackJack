@@ -1,0 +1,21 @@
+#ifndef VALUEITERATOR_H
+#define VALUEITERATOR_H
+
+#include <map>
+
+#include "model.h"
+
+class ValueIterator{
+public:
+	Model m;
+	map<State,int> policy;
+	map<State, double> value;
+	void initialiser(vector< pair<State,double> > initial_value);
+	void updateValue(State s);
+	// returns true is same otherwise false
+	void updatePolicy();
+	void iterate();
+	double qStar(State s, int a);
+};
+
+#endif
