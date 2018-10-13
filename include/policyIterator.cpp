@@ -76,12 +76,11 @@ bool PolicyIterator::updatePolicy()
 
         // Check if policy is same
         same = same && (aMax == itr->second);
-
         // Update policy
         policy[itr->first] = aMax;
     }
 
-    bool same;
+    return same;
 }
 
 void PolicyIterator::iterate()
