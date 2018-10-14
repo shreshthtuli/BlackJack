@@ -19,20 +19,21 @@ int DD = 3;
 
 
 int sum_hand(vector<int> hand){
-	int soft_value = 0;
-	int hard_value = 0;
+	int num_aces = 0, value = 0;
+	int soften = 0; // number of aces to give value = 1
+
 	for(int i = 0; i < hand.size(); i++){
-		hard_value += hand[i];
-		if(hand[i] == 11){
-			soft_value += hand[i];
-		}
+		if(hand[i] == 11)
+			num_aces++;
+		value += hand[i];
 	}
-	if(hard_value > 21){
-		return soft_value;
+
+	// Now value is sum with all aces counted as 11 i.e. hard value
+	while(value > 21 && soften <= num_aces){
+		value -= 10 * soften;
+		soften++;
 	}
-	else if(hard_value <= 21){
-		return hard_value;
-	}
+	return value;
 }
 
 
