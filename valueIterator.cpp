@@ -1,13 +1,13 @@
-#include "valueIterator.h"
+#include "./include/valueIterator.h"
 #define epsilon 0.01
 
 using namespace std;
 
-void ValueIterator::initialiser(vector< pair<State,double> > initital_value)
+void ValueIterator::initialiser(vector< pair<State,double> > initial_value)
 {
     // Initialise policy and values
     for(int i = 0; i < initial_value.size(); i++){
-        value[initial_value.at(i).first] = initital_value.at(i).second;
+        value[initial_value.at(i).first] = initial_value.at(i).second;
     }
 }
 
@@ -29,7 +29,7 @@ double ValueIterator::qStar(State s, int a)
 
 void ValueIterator::updateValue(State s)
 {
-    vector<int> actions = m.actions(s);
+    vector<int> actions = m.legalActions(s);
     int a, aMax;
     double val, valMax;
 
@@ -54,11 +54,13 @@ void ValueIterator::updatePolicy()
     vector<int> actions;
     int a, aMax;
     double val, valMax;
+    State s;
 
     // Iterate over all states
     for(itr = policy.begin(); itr != policy.end(); ++itr){
+        s = itr->first;
         // Get action vector for this state
-        actions = m.actions(itr->first);
+        actions = m.legalActions(s);
 
         aMax = actions.at(0);
         valMax = qStar(itr->first, aMax);

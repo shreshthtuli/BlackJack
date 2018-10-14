@@ -23,20 +23,21 @@ int D_STAND = 5;
 
 
 int sum_hand(vector<int> hand){
-	int soft_value = 0;
-	int hard_value = 0;
+	int num_aces = 0, value = 0;
+	int soften = 0; // number of aces to give value = 1
+
 	for(int i = 0; i < hand.size(); i++){
-		hard_value += hand[i];
-		if(hand[i] == 11){
-			soft_value += 1;
-		}
+		if(hand[i] == 11)
+			num_aces++;
+		value += hand[i];
 	}
-	if(hard_value > 21){
-		return soft_value;
+
+	// Now value is sum with all aces counted as 11 i.e. hard value
+	while(value > 21 && soften <= num_aces){
+		value -= 10 * soften;
+		soften++;
 	}
-	else if(hard_value <= 21){
-		return hard_value;
-	}
+	return value;
 }
 
 
@@ -343,6 +344,54 @@ vector< pair<State,float> > Model::next_States(State& currState, int action){
 		}
 	}
 	return res;
+}
+
+float Model::get_reward(State& s)
+{	
+	// Check final
+	if(s.dealer_final && s.curr_hand == -1){
+		int maxVal = 0;
+		bool blackjack = false;
+		bool player_busted =  true;
+		bool dealer_busted = (sum_hand(s.dealer_hand) > 21);
+		int sum;
+		for(int i = 0; i < s.hands.size(); i++){
+			sum = sum_hand(s.hands[i]);
+			if(sum == 21)
+				blackjack = true;
+			if(sum < 21)
+				player_busted = false;
+			maxVal = max(maxVal, sum);
+		}
+
+		// Check blackjack
+		if(blackjack && sum_hand(s.dealer_hand) == 21)
+			return 0;
+		else if(blackjack && sum_hand(s.dealer_hand) != 21)
+			return 2.5 * bet;
+
+		// Check busted
+		if(player_busted)
+			return -bet;
+		if(dealer_busted)
+			return +bet;
+
+		// Check values
+		if(maxVal < sum_hand(s.dealer_hand))
+			return -bet;
+		if(maxVal > sum_hand(s.dealer_hand))
+			return +bet;
+
+		if(sum_hand(s.dealer_hand) == 21 && !blackjack)
+			return -bet;
+		
+		// Equal values
+		return 0;
+	}
+	// Otherwise 0
+	else{
+		return 0;
+	}
 }
 
 int main(){
