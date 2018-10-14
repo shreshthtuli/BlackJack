@@ -16,6 +16,10 @@ int STAND = 1;
 int SPLIT = 2;
 //double down
 int DD = 3;
+//Dealer hit
+int D_HIT = 4;
+//Dealer stand
+int D_STAND = 5;
 
 
 int sum_hand(vector<int> hand){
@@ -24,7 +28,7 @@ int sum_hand(vector<int> hand){
 	for(int i = 0; i < hand.size(); i++){
 		hard_value += hand[i];
 		if(hand[i] == 11){
-			soft_value += hand[i];
+			soft_value += 1;
 		}
 	}
 	if(hard_value > 21){
@@ -149,10 +153,10 @@ vector<int> Model::legalActions(State& currState){
 
 		//follow deterministic policy of dealer
 		if(sum_hand(currState.dealer_hand) < 17){
-			actions.push_back(HIT);
+			actions.push_back(D_HIT);
 		}
 		else{
-			actions.push_back(STAND);
+			actions.push_back(D_STAND);
 		}
 	}
 
@@ -226,6 +230,35 @@ vector< pair<State,float> > Model::next_States(State& currState, int action){
 		res.push_back(p);
 	}
 
+	if(action == D_HIT){
+		pair<State,float> p;
+		State newState = currState;
+
+		newState.dealer_hand.push_back(10);
+		p.first = newState;
+		p.second = prob;
+		res.push_back(p);
+
+		for(int i = 2; i < 12; i++){
+			State newState = currState;
+			newState.dealer_hand.push_back(i);
+			if(sum_hand(newState.dealer_hand) >= 17){
+				newState.dealer_final = true;
+			}
+			p.first = newState;
+			p.second = (1-prob)/9.0;
+			res.push_back(p);
+		}
+	}
+
+	if(action == D_STAND){
+		State newState = currState;
+		newState.dealer_final = true;
+		pair<State,float> p;
+		p.first = newState;
+		p.second = 1.0;
+		res.push_back(p);
+	}
 
 	if(action == STAND){
 		State newState = currState;

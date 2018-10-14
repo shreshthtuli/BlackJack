@@ -15,7 +15,7 @@ public:
 	vector< pair<State,float> > next_States(State& currState, int action);
 	//legal actions for a state
 	vector<int> legalActions(State& currState);
-	vector< pair<State,float> > next_States(State currState, int action);
+	//vector< pair<State,float> > next_States(State currState, int action);
 	//function returns a vector of possible actions for a state
 	vector<int> actions(State currState);
 };
