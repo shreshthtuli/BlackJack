@@ -9,7 +9,7 @@ vector <State> allStates;
 
 void state_generator()
 {
-
+    
 }
 
 void initialize_value()
@@ -28,11 +28,12 @@ void print_policy(map<State,int> policy)
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     // Form intial value
     initialize_value();
     vi.initialiser(initial_value);
+    vi.m.probability = int(argv[0]);
 
     // Start iteration
     vi.iterate();
