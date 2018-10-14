@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     // Form intial value
     initialize_value();
     vi.initialiser(initial_value);
-    vi.m.probability = int(argv[0]);
+    vi.m.probability = int(argv[1]);
 
     // Start iteration
     vi.iterate();
