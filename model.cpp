@@ -395,6 +395,6 @@ float Model::get_reward(State& s)
 }
 
 int main(){
-
+	
 	return 0;
 }
