@@ -357,7 +357,7 @@ float Model::get_reward(State& s)
 		int sum;
 		for(int i = 0; i < s.hands.size(); i++){
 			sum = sum_hand(s.hands[i]);
-			if(sum == 21)
+			if(s.hands[i].size() == 2 && ((s.hands[i].at(0) == 11 && s.hands[i].at(1) == 10) || (s.hands[i].at(0) == 10 && s.hands[i].at(1) == 11)) )
 				blackjack = true;
 			if(sum < 21)
 				player_busted = false;
