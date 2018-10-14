@@ -60,7 +60,7 @@ bool PolicyIterator::updatePolicy()
     // Iterate over all states
     for(itr = policy.begin(); itr != policy.end(); ++itr){
         // Get action vector for this state
-        actions = m.actions(itr->first);
+        actions = m.legalActions(itr->first);
 
         aMax = actions.at(0);
         valMax = qStar(itr->first, aMax);
