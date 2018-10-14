@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class State{
+class State{ 
 public:
 	//keeps track of current hand
 	int curr_hand = 0;
