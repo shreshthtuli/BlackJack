@@ -313,6 +313,31 @@ vector< pair<State,float> > Model::next_States(State& currState, int action){
 	return res;
 }
 
+float Model::get_reward(State& s)
+{	
+	// Check final
+	if(s.dealer_final && s.curr_hand == -1){
+		// Check blackjack
+		bool blackjack = false;
+		for(int i = 0; i < s.hands.size(); i++){
+			if(sum_hand(s.hands[i]) == 21)
+				blackjack = blackjack || true;
+		}
+
+		if(blackjack && sum_hand(s.dealer_hand) == 21)
+			return 0;
+		else if(blackjack && sum_hand(s.dealer_hand) != 21)
+			return 2.5 * bet;
+
+		// Check win/lose
+		
+	}
+	// Otherwise 0
+	else{
+		return 0;
+	}
+}
+
 int main(){
 	
 	return 0;
