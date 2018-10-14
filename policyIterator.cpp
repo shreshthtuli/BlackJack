@@ -1,4 +1,4 @@
-#include "policyIterator.h";
+#include "./include/policyIterator.h";
 #define epsilon 0.01
 
 using namespace std;
@@ -56,11 +56,13 @@ bool PolicyIterator::updatePolicy()
     int a, aMax;
     double val, valMax;
     bool same = true;
+    State s;
 
     // Iterate over all states
     for(itr = policy.begin(); itr != policy.end(); ++itr){
+        s = itr->first;
         // Get action vector for this state
-        actions = m.legalActions(itr->first);
+        actions = m.legalActions(s);
 
         aMax = actions.at(0);
         valMax = qStar(itr->first, aMax);
