@@ -317,20 +317,43 @@ float Model::get_reward(State& s)
 {	
 	// Check final
 	if(s.dealer_final && s.curr_hand == -1){
-		// Check blackjack
+		int maxVal = 0;
 		bool blackjack = false;
+		bool player_busted =  true;
+		bool dealer_busted = (sum_hand(s.dealer_hand) > 21);
+		int sum;
 		for(int i = 0; i < s.hands.size(); i++){
-			if(sum_hand(s.hands[i]) == 21)
-				blackjack = blackjack || true;
+			sum = sum_hand(s.hands[i]);
+			if(sum == 21)
+				blackjack = true;
+			if(sum < 21)
+				player_busted = false;
+			maxVal = max(maxVal, sum);
 		}
 
+		// Check blackjack
 		if(blackjack && sum_hand(s.dealer_hand) == 21)
 			return 0;
 		else if(blackjack && sum_hand(s.dealer_hand) != 21)
 			return 2.5 * bet;
 
-		// Check win/lose
+		// Check busted
+		if(player_busted)
+			return -bet;
+		if(dealer_busted)
+			return +bet;
+
+		// Check values
+		if(maxVal < sum_hand(s.dealer_hand))
+			return -bet;
+		if(maxVal > sum_hand(s.dealer_hand))
+			return +bet;
+
+		if(sum_hand(s.dealer_hand) == 21 && !blackjack)
+			return -bet;
 		
+		// Equal values
+		return 0;
 	}
 	// Otherwise 0
 	else{
