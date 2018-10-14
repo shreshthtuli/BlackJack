@@ -13,6 +13,8 @@ public:
 	float get_reward(State& s);
 	//function returns a vector of states alongwith probabilities given current state and action
 	vector< pair<State,float> > next_States(State& currState, int action);
+	//legal actions for a state
+	vector<int> legalActions(State& currState);
 };
 
 #endif
