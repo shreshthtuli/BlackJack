@@ -468,6 +468,7 @@ void showNextStates(vector< pair<State,float> > nextStates){
 		cout << "\n\n";
 	}
 }
+
 int main(){
 	State s;
 	s.curr_hand = 0;
@@ -492,5 +493,4 @@ int main(){
 	next = m.next_States(aces,SPLIT);
 	showNextStates(next);
 	cout << next.size() << endl;
-	return 0;
 }
