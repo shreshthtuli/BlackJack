@@ -20,6 +20,8 @@ int DD = 3;
 int D_HIT = 4;
 //Dealer stand
 int D_STAND = 5;
+//Maximum number of hands
+int MAX_NUM_HANDS = 2;
 
 
 int sum_hand(vector<int> hand){
@@ -129,7 +131,12 @@ vector<int> Model::legalActions(State& currState){
 			//create a new state corresponding to that hand only and find all nextStates for this state
 			State newState;
 			newState.curr_hand = 0;
-			newState.initial.push_back(first_NF);
+			if(currState.hands.size() < MAX_NUM_HANDS){
+				newState.initial.push_back(currState.initial[first_NF]);
+			}
+			else{
+				newState.initial.push_back(false);
+			}
 			newState.hands.push_back(currState.hands[currState.curr_hand]);
 			newState.dealer_hand = currState.dealer_hand;
 			newState.reward = currState.reward;
