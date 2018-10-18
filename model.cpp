@@ -20,6 +20,8 @@ int DD = 3;
 int D_HIT = 4;
 //Dealer stand
 int D_STAND = 5;
+//Maximum number of hands
+int MAX_NUM_HANDS = 2;
 
 
 int sum_hand(vector<int> hand){
@@ -129,7 +131,12 @@ vector<int> Model::legalActions(State& currState){
 			//create a new state corresponding to that hand only and find all nextStates for this state
 			State newState;
 			newState.curr_hand = 0;
-			newState.initial.push_back(first_NF);
+			if(currState.hands.size() < MAX_NUM_HANDS){
+				newState.initial.push_back(currState.initial[first_NF]);
+			}
+			else{
+				newState.initial.push_back(false);
+			}
 			newState.hands.push_back(currState.hands[currState.curr_hand]);
 			newState.dealer_hand = currState.dealer_hand;
 			newState.reward = currState.reward;
@@ -469,28 +476,98 @@ void showNextStates(vector< pair<State,float> > nextStates){
 	}
 }
 
-int main(){
-	State s;
-	s.curr_hand = 0;
-	s.initial.push_back(true);
-	vector<int> hand;
-	hand.push_back(10);
-	hand.push_back(10);
-	s.hands.push_back(hand);
-	s.dealer_hand.push_back(11);
-	s.reward = 0;
-	s.dealer_final = false;
-	Model m;
-	vector<int> actions = m.legalActions(s);
-	// showActions(actions);
-	vector< pair<State,float> > next = m.next_States(s,SPLIT);
-	// showNextStates(next);
-	// cout << next.size() << endl;
-	State aces = next[next.size()-10].first;
-	cout << aces.curr_hand << " fssfsf" << endl;
-	actions = m.legalActions(aces);
-	showActions(actions);
-	next = m.next_States(aces,SPLIT);
-	showNextStates(next);
-	cout << next.size() << endl;
-}
+// vector<State> initialStatesGenerator(){
+// 	vector<State> res;
+// 	for(int i = 2; i < 12; i++){
+// 		for(int j = 2; j < 12; j++){
+// 			for(int k = 2; k < 12; k++){
+// 				State s;
+// 				s.curr_hand = 0;
+// 				s.initial.push_back(true);
+// 				vector<int> hand;
+// 				hand.push_back(i);
+// 				hand.push_back(j);
+// 				s.hands.push_back(hand);
+// 				s.dealer_hand.push_back(k);
+// 				s.reward = 0;
+// 				s.dealer_final = false;
+// 				res.push_back(s);
+// 			}
+// 		}
+// 	}
+// 	return res;
+// }
+
+// vector<State> allStatesDFS(State init_state){
+// 	Model m;
+// 	vector<State> res;
+// 	//res.push_back(init_state);
+// 	vector<int> actions = m.legalActions(init_state);
+// 	showState(init_state);
+// 	cout << endl;
+// 	showActions(actions);
+// 	cout << endl;
+// 	cout << actions.size() << endl;
+// 	for (int i = 0; i < actions.size(); ++i)
+// 	{
+// 		vector< pair<State,float> > nextStatesProb = m.next_States(init_state,actions[i]);
+// 		for (int j = 0; j < nextStatesProb.size(); j++)
+// 			{
+// 				State neighbour = nextStatesProb[i].first;
+// 				vector<State> subtree = allStatesDFS(neighbour);
+// 				res.insert(res.end(),subtree.begin(),subtree.end());
+// 			}	
+// 	}
+// 	cout << "vvrrw" << endl;
+// 	return res;
+// }
+
+
+// vector<State> allStatesGenerator(){
+// 	vector<State> initStates = initialStatesGenerator();
+// 	vector<State> res;
+// 	vector<State> next;
+// 	Model m;
+// 	for(int i = 0; i < initStates.size(); i++){
+// 		res.push_back(initStates[i]);
+// 		next = allStatesDFS(initStates[i]);
+// 		res.insert(res.end(),next.begin(),next.end());
+// 	}
+// 	return res;
+// }
+
+// int main(){
+// 	//Testing
+// 	State s;
+// 	s.curr_hand = 0;
+// 	s.initial.push_back(true);
+// 	vector<int> hand;
+// 	hand.push_back(2);
+// 	hand.push_back(4);
+// 	hand.push_back(10);
+// 	hand.push_back(10);
+// 	s.hands.push_back(hand);
+// 	s.dealer_hand.push_back(7);
+// 	s.dealer_hand.push_back(10);
+// 	s.reward = 0;
+// 	s.dealer_final = true;
+// 	// Model m;
+// 	// vector<int> actions = m.legalActions(s);
+// 	// // showActions(actions);
+// 	// vector< pair<State,float> > next = m.next_States(s,SPLIT);
+// 	// showNextStates(next);
+// 	// cout << next.size() << endl;
+// 	// State aces = next[next.size()-10].first;
+// 	// cout << aces.curr_hand << " fssfsf" << endl;
+// 	// actions = m.legalActions(aces);
+// 	// showActions(actions);
+// 	// next = m.next_States(aces,SPLIT);
+// 	// showNextStates(next);
+// 	// cout << next.size() << endl;
+// 	// vector<State> initStates = initialStatesGenerator();
+// 	// State s = initStates[25];
+// 	showState(s);
+// 	cout << endl;
+// 	vector<State> allStates = allStatesDFS(s);
+// 	cout << allStates.size() << endl;
+// }
