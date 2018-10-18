@@ -11,7 +11,7 @@ public:
 	map<State,int> policy;
 	map<State, double> value;
 	void initialiser(vector< pair<State,double> > initial_value);
-	void updateValue(State s);
+	double vStar(State s);
 	// returns true is same otherwise false
 	void updatePolicy();
 	void iterate();

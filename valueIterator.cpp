@@ -27,7 +27,7 @@ double ValueIterator::qStar(State s, int a)
     return val;
 }
 
-void ValueIterator::updateValue(State s)
+double ValueIterator::vStar(State s)
 {
     vector<int> actions = m.legalActions(s);
     int a, aMax;
@@ -43,9 +43,8 @@ void ValueIterator::updateValue(State s)
             valMax = val;
             aMax = a;
         }
-        // Update value
-        value[s] = aMax;
     }
+    return valMax;
 }
 
 void ValueIterator::updatePolicy()
@@ -81,19 +80,19 @@ void ValueIterator::updatePolicy()
 void ValueIterator::iterate()
 {
     double residual = epsilon;
-    State sPrime;
-    double prob;
+    State curState;
     map <State, double> :: iterator itr;
-    map<State, double> nextValue;
+    map <State, double> nextValue;
 
     // Compute values till residual < epsilon
     while(residual >= epsilon){
         // Iterate over all states
         for(itr = value.begin(); itr != value.end(); ++itr){
+            curState = itr->first;
             // Update value based on bellman equation
-            nextValue[itr->first] = qStar(itr->first, itr->second);
+            nextValue[curState] = vStar(curState);
             // Calculate residual
-            residual = max(residual, abs(nextValue.at(itr->first) - value.at(itr->first)));
+            residual = max(residual, abs(nextValue.at(curState) - value.at(curState)));
         }
         // Update value to next value
         value = nextValue;
