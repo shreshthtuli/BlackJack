@@ -10,7 +10,7 @@ public:
 	Model m;
 	map<State,int> policy;
 	map<State, double> value;
-	void initialiser(vector< pair<State,double> > initial_value);
+	void initialiser(vector<State> initial_value);
 	double vStar(State s);
 	// returns true is same otherwise false
 	void updatePolicy();

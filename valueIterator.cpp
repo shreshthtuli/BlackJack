@@ -3,11 +3,11 @@
 
 using namespace std;
 
-void ValueIterator::initialiser(vector< pair<State,double> > initial_value)
+void ValueIterator::initialiser(vector<State> initial_value)
 {
     // Initialise policy and values
     for(int i = 0; i < initial_value.size(); i++){
-        value[initial_value.at(i).first] = initial_value.at(i).second;
+        value[initial_value.at(i)] = 0;
     }
 }
 
@@ -86,9 +86,11 @@ void ValueIterator::iterate()
 
     // Compute values till residual < epsilon
     while(residual >= epsilon){
+        std::cerr << "Residual value : " << residual << std::endl;
         // Iterate over all states
         for(itr = value.begin(); itr != value.end(); ++itr){
             curState = itr->first;
+            m.showState(curState);
             // Update value based on bellman equation
             nextValue[curState] = vStar(curState);
             // Calculate residual
