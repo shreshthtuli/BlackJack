@@ -500,43 +500,43 @@ vector<State> initialStatesGenerator(){
 	return res;
 }
 
-vector<State> allStatesDFS(State init_state){
-	Model m;
-	vector<State> res;
-	//res.push_back(init_state);
-	vector<int> actions = m.legalActions(init_state);
-	showState(init_state);
-	cout << endl;
-	showActions(actions);
-	cout << endl;
-	cout << actions.size() << endl;
-	for (int i = 0; i < actions.size(); ++i)
-	{
-		vector< pair<State,float> > nextStatesProb = m.next_States(init_state,actions[i]);
-		for (int j = 0; j < nextStatesProb.size(); j++)
-			{
-				State neighbour = nextStatesProb[i].first;
-				vector<State> subtree = allStatesDFS(neighbour);
-				res.insert(res.end(),subtree.begin(),subtree.end());
-			}	
-	}
-	cout << "vvrrw" << endl;
-	return res;
-}
+// vector<State> allStatesDFS(State init_state){
+// 	Model m;
+// 	vector<State> res;
+// 	//res.push_back(init_state);
+// 	vector<int> actions = m.legalActions(init_state);
+// 	showState(init_state);
+// 	cout << endl;
+// 	showActions(actions);
+// 	cout << endl;
+// 	cout << actions.size() << endl;
+// 	for (int i = 0; i < actions.size(); ++i)
+// 	{
+// 		vector< pair<State,float> > nextStatesProb = m.next_States(init_state,actions[i]);
+// 		for (int j = 0; j < nextStatesProb.size(); j++)
+// 			{
+// 				State neighbour = nextStatesProb[i].first;
+// 				vector<State> subtree = allStatesDFS(neighbour);
+// 				res.insert(res.end(),subtree.begin(),subtree.end());
+// 			}	
+// 	}
+// 	cout << "vvrrw" << endl;
+// 	return res;
+// }
 
 
-vector<State> allStatesGenerator(){
-	vector<State> initStates = initialStatesGenerator();
-	vector<State> res;
-	vector<State> next;
-	Model m;
-	for(int i = 0; i < initStates.size(); i++){
-		res.push_back(initStates[i]);
-		next = allStatesDFS(initStates[i]);
-		res.insert(res.end(),next.begin(),next.end());
-	}
-	return res;
-}
+// vector<State> allStatesGenerator(){
+// 	vector<State> initStates = initialStatesGenerator();
+// 	vector<State> res;
+// 	vector<State> next;
+// 	Model m;
+// 	for(int i = 0; i < initStates.size(); i++){
+// 		res.push_back(initStates[i]);
+// 		next = allStatesDFS(initStates[i]);
+// 		res.insert(res.end(),next.begin(),next.end());
+// 	}
+// 	return res;
+// }
 
 // int main(){
 // 	State s;
