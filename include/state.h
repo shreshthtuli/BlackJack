@@ -23,6 +23,10 @@ public:
 	//if dealer is final
 	bool dealer_final;
 	//if all hands and dealer are final, then state is final
+	bool operator <( const State &rhs ) const
+    {
+       return hands.at(0).size() < hands.at(0).size();
+    }
 
 };
 
