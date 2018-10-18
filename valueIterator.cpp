@@ -49,14 +49,14 @@ double ValueIterator::vStar(State s)
 
 void ValueIterator::updatePolicy()
 {
-    map <State, int> :: iterator itr;
+    map <State, double> :: iterator itr;
     vector<int> actions;
     int a, aMax;
     double val, valMax;
     State s;
 
     // Iterate over all states
-    for(itr = policy.begin(); itr != policy.end(); ++itr){
+    for(itr = value.begin(); itr != value.end(); ++itr){
         s = itr->first;
         // Get action vector for this state
         actions = m.legalActions(s);
@@ -73,7 +73,7 @@ void ValueIterator::updatePolicy()
             }
         }
         // Update policy
-        policy[itr->first] = aMax;
+        policy[s] = aMax;
     }
 }
 
