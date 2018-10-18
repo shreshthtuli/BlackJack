@@ -391,8 +391,7 @@ float Model::get_reward(State* s)
 				blackjack = true;
 			if(sum < 21)
 				player_busted = false;
-			if(sum <= 21)
-				maxVal = max(maxVal, sum);
+			maxVal = max(maxVal, sum);
 		}
 
 		// Check blackjack
@@ -425,6 +424,120 @@ float Model::get_reward(State* s)
 	}
 }
 
+void showActions(vector<int> actions){
+	int act;
+	for(int i = 0; i < actions.size(); i++){
+		act = actions[i];
+		if(act == 0){
+			cout << "HIT" << endl;
+		}
+		else if(act == 1){
+			cout << "STAND" << endl;
+		}
+		else if(act == 2){
+			cout << "SPLIT" << endl;
+		}
+		else if(act == 3){
+			cout << "DOUBLE DOWN" << endl;
+		}
+		else if(act == 4){
+			cout << "DEALER HIT" << endl;
+		}
+		else if(act == 5){
+			cout << "DEALER STAND" << endl;
+		}
+	}
+}
+
+void showHand(vector<int> hand){
+	for(int i = 0; i < hand.size(); i++){
+		cout << hand[i] << " ";
+	}
+}
+
+void showHands(vector< vector<int> > hands){
+	for(int i = 0; i < hands.size(); i++){
+		showHand(hands[i]);
+	}
+	cout << endl;
+}
+
+void showState(State s){
+	cout << "My hands" << endl;
+	showHands(s.hands);
+	cout << "Dealer hand" << endl;
+	showHand(s.dealer_hand);
+}
+
+void showNextStates(vector< pair<State,float> > nextStates){
+	for(int i = 0; i < nextStates.size(); i++){
+		cout << "Probability : " << nextStates[i].second << endl;
+		cout << "State :" << endl;
+		showState(nextStates[i].first);
+		cout << "\n\n";
+	}
+}
+
+vector<State> initialStatesGenerator(){
+	vector<State> res;
+	for(int i = 2; i < 12; i++){
+		for(int j = 2; j < 12; j++){
+			for(int k = 2; k < 12; k++){
+				State s;
+				s.curr_hand = 0;
+				s.initial.push_back(true);
+				vector<int> hand;
+				hand.push_back(i);
+				hand.push_back(j);
+				s.hands.push_back(hand);
+				s.dealer_hand.push_back(k);
+				s.reward = 0;
+				s.dealer_final = false;
+				res.push_back(s);
+			}
+		}
+	}
+	return res;
+}
+
+vector<State> allStatesDFS(State init_state){
+	Model m;
+	vector<State> res;
+	//res.push_back(init_state);
+	vector<int> actions = m.legalActions(init_state);
+	showState(init_state);
+	cout << endl;
+	showActions(actions);
+	cout << endl;
+	cout << actions.size() << endl;
+	for (int i = 0; i < actions.size(); ++i)
+	{
+		vector< pair<State,float> > nextStatesProb = m.next_States(init_state,actions[i]);
+		for (int j = 0; j < nextStatesProb.size(); j++)
+			{
+				State neighbour = nextStatesProb[i].first;
+				vector<State> subtree = allStatesDFS(neighbour);
+				res.insert(res.end(),subtree.begin(),subtree.end());
+			}	
+	}
+	cout << "vvrrw" << endl;
+	return res;
+}
+
+
+vector<State> allStatesGenerator(){
+	vector<State> initStates = initialStatesGenerator();
+	vector<State> res;
+	vector<State> next;
+	Model m;
+	for(int i = 0; i < initStates.size(); i++){
+		res.push_back(initStates[i]);
+		next = allStatesDFS(initStates[i]);
+		res.insert(res.end(),next.begin(),next.end());
+	}
+	return res;
+}
+
 // int main(){
 // 	State s;
 // 	s.curr_hand = 0;
@@ -449,4 +562,4 @@ float Model::get_reward(State* s)
 // 	next = m.next_States(aces,SPLIT);
 // 	showNextStates(next);
 // 	cout << next.size() << endl;
-// }
+
