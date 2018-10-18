@@ -8,14 +8,14 @@
 class ValueIterator{
 public:
 	Model m;
-	map<State,int> policy;
-	map<State, double> value;
-	void initialiser(vector<State> initial_value);
-	double vStar(State s);
+	map<State*,int> policy;
+	map<State*, double> value;
+	void initialiser(vector<State*> initial_value);
+	double vStar(State* s);
 	// returns true is same otherwise false
 	void updatePolicy();
 	void iterate();
-	double qStar(State s, int a);
+	double qStar(State* s, int a);
 };
 
 #endif

@@ -10,11 +10,11 @@ public:
 	//my bet
 	float bet;
 	//function to get reward given state 
-	float get_reward(State& s);
+	float get_reward(State* s);
 	//function returns a vector of states alongwith probabilities given current state and action
-	vector< pair<State,float> > next_States(State& currState, int action);
+	vector< pair<State*,float> > next_States(State* currState, int action);
 	//legal actions for a state
-	vector<int> legalActions(State& currState);
+	vector<int> legalActions(State* currState);
 
 void showActions(vector<int> actions){
 	int act;
@@ -55,15 +55,15 @@ void showHands(vector< vector<int> > hands){
 	cout << endl;
 }
 
-void showState(State s){
+void showState(State* s){
 	cout << "My hands " << endl;
-	showHands(s.hands);
+	showHands(s->hands);
 	cout << "Dealer hand" << endl;
-	showHand(s.dealer_hand);
+	showHand(s->dealer_hand);
 	cout << endl;
 }
 
-void showNextStates(vector< pair<State,float> > nextStates){
+void showNextStates(vector< pair<State*,float> > nextStates){
 	for(int i = 0; i < nextStates.size(); i++){
 		cout << "Probability : " << nextStates[i].second << endl;
 		cout << "State :" << endl;

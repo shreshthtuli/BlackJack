@@ -23,9 +23,21 @@ public:
 	//if dealer is final
 	bool dealer_final;
 	//if all hands and dealer are final, then state is final
+	State(){
+
+	}
+	State(State *s){
+		curr_hand = s->curr_hand;
+		initial = s->initial;
+		hands = s->hands;
+		dealer_hand = s->dealer_hand;
+		reward = s->reward;
+		hands_final = s->hands_final;
+		dealer_final = s->dealer_final;
+	}
 	bool operator <( const State &rhs ) const
     {
-       return hands.at(0).size() < hands.at(0).size();
+       return false;
     }
 
 };
