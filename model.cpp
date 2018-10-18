@@ -361,7 +361,8 @@ float Model::get_reward(State& s)
 				blackjack = true;
 			if(sum < 21)
 				player_busted = false;
-			maxVal = max(maxVal, sum);
+			if(sum <= 21)
+				maxVal = max(maxVal, sum);
 		}
 
 		// Check blackjack
