@@ -287,6 +287,7 @@ vector< pair<State,float> > Model::next_States(State& currState, int action){
 		pair<State,float> p;
 		State s;
 		hit_res = next_States(currState,HIT);
+		cout << "fdff" << hit_res.size() << endl;
 		for(int i = 0; i < hit_res.size(); i++){
 			//if more hands available, move to next hand
 			if(hit_res[i].first.curr_hand < hit_res[i].first.hands.size() - 1){
@@ -297,6 +298,7 @@ vector< pair<State,float> > Model::next_States(State& currState, int action){
 				hit_res[i].first.curr_hand = -1;
 			}
 		}
+		res.insert(res.end(),hit_res.begin(),hit_res.end());
 	}
 
 
@@ -307,8 +309,9 @@ vector< pair<State,float> > Model::next_States(State& currState, int action){
 		if(currState.initial[currState.curr_hand] == true){
 			State newState;
 			newState.curr_hand = 0;
-			newState.initial[newState.curr_hand] = true;
+			newState.initial.push_back(true);
 			vector<int> hand;
+			//push first card of spli pair into new State
 			hand.push_back(currState.hands[newState.curr_hand][0]);
 			newState.hands.push_back(hand);
 			vector< pair<State,float> > hit_res;
@@ -317,25 +320,43 @@ vector< pair<State,float> > Model::next_States(State& currState, int action){
 			pair<State,float> p;
 			//stores result of hitting the split card
 			hit_res = next_States(newState, HIT);
-			//
+			// cout << hit_res.size() << "ghuuhgu" << endl;
 			for(int i = 0; i < hit_res.size(); i++){
 				for(int j = 0; j < hit_res.size(); j++){
 					p1 = hit_res[i];
 					p2 = hit_res[j];
 					State newState = currState;
+					// cout << i << " " << j << endl;
 					//remove the split hand from current position and move two split hands to the end
 					newState.initial.erase(newState.initial.begin() + newState.curr_hand);
+					// cout << "here" << endl;
+					cout << (currState.hands[currState.curr_hand][0]) << endl;
 					if(currState.hands[currState.curr_hand][0] == 11){
-						newState.initial.push_back(false);
-						newState.initial.push_back(false);
+						// cout << "here" << endl;
+						newState.initial.insert(newState.initial.begin() + newState.curr_hand, false);
+						newState.initial.insert(newState.initial.begin() + newState.curr_hand + 1, false);
 					}
 					else{
-						newState.initial.push_back(true);
-						newState.initial.push_back(true);
+						// cout << "here" << endl;
+						newState.initial.insert(newState.initial.begin() + newState.curr_hand, true);
+						newState.initial.insert(newState.initial.begin() + newState.curr_hand + 1, true);
 					}
 					newState.hands.erase(newState.hands.begin() + newState.curr_hand);
-					newState.hands.push_back(p1.first.hands[0]);
-					newState.hands.push_back(p2.first.hands[0]);
+					newState.hands.insert(newState.hands.begin() + newState.curr_hand, p1.first.hands[0]);
+					newState.hands.insert(newState.hands.begin() + newState.curr_hand + 1, p2.first.hands[0]);
+					if(sum_hand(p1.first.hands[0]) >= 21){
+						newState.curr_hand = newState.curr_hand + 1;
+					}
+					if(sum_hand(p2.first.hands[0]) >= 21){
+						//if more hands available, move to next hand
+						if(newState.curr_hand < newState.hands.size() - 1){
+							newState.curr_hand = newState.curr_hand + 1;
+						}
+						//else declare final state
+						else{
+							newState.curr_hand = -1;
+						}
+					}
 					p.first = newState;
 					p.second = p1.second*p2.second;
 					res.push_back(p);
@@ -395,7 +416,82 @@ float Model::get_reward(State& s)
 	}
 }
 
+void showActions(vector<int> actions){
+	int act;
+	for(int i = 0; i < actions.size(); i++){
+		act = actions[i];
+		if(act == 0){
+			cout << "HIT" << endl;
+		}
+		else if(act == 1){
+			cout << "STAND" << endl;
+		}
+		else if(act == 2){
+			cout << "SPLIT" << endl;
+		}
+		else if(act == 3){
+			cout << "DOUBLE DOWN" << endl;
+		}
+		else if(act == 4){
+			cout << "DEALER HIT" << endl;
+		}
+		else if(act == 5){
+			cout << "DEALER STAND" << endl;
+		}
+	}
+}
+
+void showHand(vector<int> hand){
+	for(int i = 0; i < hand.size(); i++){
+		cout << hand[i] << " ";
+	}
+}
+
+void showHands(vector< vector<int> > hands){
+	for(int i = 0; i < hands.size(); i++){
+		showHand(hands[i]);
+	}
+	cout << endl;
+}
+
+void showState(State s){
+	cout << "My hands" << endl;
+	showHands(s.hands);
+	cout << "Dealer hand" << endl;
+	showHand(s.dealer_hand);
+}
+
+void showNextStates(vector< pair<State,float> > nextStates){
+	for(int i = 0; i < nextStates.size(); i++){
+		cout << "Probability : " << nextStates[i].second << endl;
+		cout << "State :" << endl;
+		showState(nextStates[i].first);
+		cout << "\n\n";
+	}
+}
+
 int main(){
-	
-	return 0;
+	State s;
+	s.curr_hand = 0;
+	s.initial.push_back(true);
+	vector<int> hand;
+	hand.push_back(10);
+	hand.push_back(10);
+	s.hands.push_back(hand);
+	s.dealer_hand.push_back(11);
+	s.reward = 0;
+	s.dealer_final = false;
+	Model m;
+	vector<int> actions = m.legalActions(s);
+	// showActions(actions);
+	vector< pair<State,float> > next = m.next_States(s,SPLIT);
+	// showNextStates(next);
+	// cout << next.size() << endl;
+	State aces = next[next.size()-10].first;
+	cout << aces.curr_hand << " fssfsf" << endl;
+	actions = m.legalActions(aces);
+	showActions(actions);
+	next = m.next_States(aces,SPLIT);
+	showNextStates(next);
+	cout << next.size() << endl;
 }
