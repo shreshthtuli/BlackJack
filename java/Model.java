@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.*;
+import javafx.util.*; 
+
 
 import com.sun.swing.internal.plaf.metal.resources.metal;
 
@@ -25,21 +28,22 @@ public class Model{
         }
 
         else if(s.stall() > target){
-            dealer_prob.put(p,0);
+            dealer_prob.put(p,0.0);
         }
 
-        else if(s.stall() == target){
-            dealer_prob.put(p,1);
+        else if(s.stand() == target){
+            dealer_prob.put(p,1.0);
         }
 
         else{
             ArrayList<Integer> actions = legalAction(s);
             double prob = 0;
             for(int i = 0; i < actions; i++){
+                int action = actions.get(i);
                 if(action != SPLIT && action != DD){
-                    ArrayList<Pair<State, Double>> next_states = nextStates(s,actions[i]);
+                    ArrayList<Pair<State, Double>> next_states = nextStates(s,action);
                     for(int j = 0; j < next_states.size(); j++){
-                        prob += next_states.getValue().get_dealer_prob(s.hand,p.getValue());
+                        prob += next_states.get(j).getValue().get_dealer_prob(s.hand,p.getValue());
                     }
                 }
             }
@@ -69,15 +73,15 @@ public class Model{
         }
 
         if(s.hand >= 26 && s.hand <= 35 && this.ace_split == false){
-            actions.insert(SPLIT);
+            actions.add(SPLIT);
         }   
 
         if(s.doubled == false){
-            actions.insert(HIT);
-            actions.insert(DD);
+            actions.add(HIT);
+            actions.add(DD);
         }
         
-        actions.insert(STAND);
+        actions.add(STAND);
 
         return actions;
     }
@@ -99,7 +103,7 @@ public class Model{
                 case SPLIT: news.split(i); weight = 2; break;                            
             }
             double prob = (i == 10) ? weight * this.probability : weight * (1 - this.probability) / 9;
-            ans.insert(Pair(news, prob));
+            ans.add(Pair(news, prob));
         }
         return ans;
     }
@@ -126,7 +130,7 @@ public class Model{
         if(my_sum > dealer_sum)
             return +bet;
 
-        if(dealer_sum = 21 && !blackjack)
+        if(dealer_sum == 21 && !blackjack)
             return -bet;
         
         // Equal values
@@ -136,8 +140,9 @@ public class Model{
     double getReward(State s){
         double reward = 0;
         for(int i = 17; i <= 23; i++)
-            reward += dealer_prob(Pair(s.dealer_hand, i)) * rewardHelper(s, i);
+            reward += dealer_prob.get(Pair(s.dealer_hand, i)) * rewardHelper(s, i);
 
         return reward;
     }
 }
+
