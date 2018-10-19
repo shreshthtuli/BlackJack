@@ -18,7 +18,22 @@ public class State{
 	}
 
 	int stall(){
-		return this.hand;
+		// Return sum
+		if(this.hand <= 17){
+			return this.hand + 3;
+		}
+		else if(this.hand <= 25){
+			return this.hand - 5; 
+		}
+		else if(this.hand <= 34){
+			return 2 * (this.hand - 24);
+		}
+		else if(this.hand == 35){
+			return 12;
+		}
+		else{
+			return 21;
+		}
 	}
 
 	void hit(int card){
