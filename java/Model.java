@@ -16,7 +16,7 @@ public class Model{
     void form_dealer_prob(){
         for(int mysum = 4; mysum <= 30; mysum++){
             for(int dealer = 2; dealer <= 11; dealer++){
-                
+
             }
         }
     }
@@ -48,7 +48,7 @@ public class Model{
         ArrayList<Pair<State, Double>> ans = new ArrayList<>();
         int weight;
 
-        if(a = STAND)
+        if(a == STAND)
             return ans;    
 
         for(int i = 2; i <= 11; i++){
