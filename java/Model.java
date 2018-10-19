@@ -6,7 +6,8 @@ public class Model{
 
     static int HIT = 0, STAND = 1, SPLIT = 2, DD = 3;
     double probability;
-    HashMap<Pair<Integer, Integer>, Pair<Double, Double>> dealer_prob;
+    HashMap<Pair<Integer, Integer>, Double> dealer_prob;
+    static double bet = 1;
 
     Model(double p){
         this.probability = p;
@@ -103,16 +104,40 @@ public class Model{
         return ans;
     }
 
-    double getReward(State s){
-        int mysum = s.stand();
-        int dealer = s.dealer_hand;
-        Pair<Double, Double> probability = dealer_prob.get(Pair(mysum, dealer));
-        if(s.hand == 37){
-            return probability.first * 1.5;
-        }
-        else{
-            return probability.first - probability.second;
-        }
+    double rewardHelper(State s, int dealer_sum){
+        int my_sum = s.stand();
+        boolean blackjack = (s.hand == 37);
+
+        // Check blackjack
+        if(blackjack && dealer_sum == 22)
+            return 0;
+        else if(blackjack && dealer_sum != 21)
+            return 1.5 * bet;
+
+        // Check busted
+        if(s.hand == 0)
+            return -bet;
+        if(dealer_sum == 23)
+            return +bet;
+
+        // Check values
+        if(my_sum < dealer_sum)
+            return -bet;
+        if(my_sum > dealer_sum)
+            return +bet;
+
+        if(dealer_sum = 21 && !blackjack)
+            return -bet;
+        
+        // Equal values
         return 0;
+    }
+
+    double getReward(State s){
+        double reward = 0;
+        for(int i = 17; i <= 23; i++)
+            reward += dealer_prob(Pair(s.dealer_hand, i)) * rewardHelper(s, i);
+
+        return reward;
     }
 }
