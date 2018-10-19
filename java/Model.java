@@ -37,12 +37,11 @@ public class Model{
     ArrayList<Pair<State, Double>> nextStates(State s, int a){
 
         ArrayList<Pair<State, Double>> ans = new ArrayList<>();
+        int weight;
 
         if(a = STAND)
-            return ans;
+            return ans;    
 
-        int weight;
-        
         for(int i = 2; i <= 11; i++){
             State news = new State(s);
             weight = 1;
@@ -51,11 +50,7 @@ public class Model{
                 case DD: news.double_down(i); break;
                 case SPLIT: news.split(i); weight = 2; break;                            
             }
-            double prob;
-            if(i == 10)
-                prob = weight * this.probability;
-            else
-                prob = weight * (1 - this.probability) / 9;
+            double prob = (i == 10) ? weight * this.probability : weight * (1 - this.probability) / 9;
             ans.insert(Pair(news, prob));
         }
         return ans;
