@@ -64,7 +64,7 @@ public class Model{
 
     double rewardHelper(State s, int dealer_sum){
         int my_sum = s.stand();
-        bool blackjack = (s.hand == 37);
+        boolean blackjack = (s.hand == 37);
 
         // Check blackjack
         if(blackjack && dealer_sum == 22)
