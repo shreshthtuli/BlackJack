@@ -4,6 +4,7 @@ public class Model{
 
     static int HIT = 0, STAND = 1, SPLIT = 2, DD = 3;
     double probability;
+    HashMap<Pair<Integer, Integer>, Pair<Double, Double>> dealer_prob;
 
     Model(double p){
         this.probability = p;
@@ -29,5 +30,22 @@ public class Model{
         actions.insert(STAND);
 
         return actions;
+    }
+
+    ArrayList<Pair<State, Integer>> nextStates(State s, int a){
+
+    }
+
+    double getReward(State s){
+        int mysum = s.stand();
+        int dealer = s.dealer_hand;
+        Pair<Double, Double> probability = dealer_prob.get(Pair(mysum, dealer));
+        if(s.hand == 37){
+            return probability.first * 1.5;
+        }
+        else{
+            return probability.first - probability.second;
+        }
+        return 0;
     }
 }
