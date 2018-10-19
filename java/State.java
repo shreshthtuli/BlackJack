@@ -4,6 +4,9 @@ public class State{
 	
 	// hand
 	int hand;
+	int dealer_hand;
+	boolean doubled;
+	boolean ace_split;
 
 	// Integer -1 for not set
 	// Integer 0 for bust
@@ -15,9 +18,12 @@ public class State{
 
 	State(){
 		this.hand = -1;
+		this.dealer_hand = -1;
+		this.doubled = false;
+		this.ace_split = false;
 	}
 
-	int stall(){
+	int stand(){
 		// Return sum
 		if(this.hand <= 17){
 			return this.hand + 3;
@@ -34,6 +40,11 @@ public class State{
 		else{
 			return 21;
 		}
+	}
+
+	void double_down(int card){
+		this.doubled = true;
+		this.hit(card);
 	}
 
 	void hit(int card){
@@ -111,23 +122,39 @@ public class State{
 
 	void split(int card){
 		int cur_card = this.hand - 24;
+		if(cur_card == 11){
+			this.ace_split = true;
+		}
 		if(card == 11){
 			if(cur_card == 10){
 				// Blackjack
 				this.hand = 37;
 			}
 			else if(cur_card == 11){
+				// A + A
+				this.hand = 35;
+			}
+			else{
 				// A + card
 				this.hand = 16 + cur_card;
 			}
-			else if(this.hand + 3 + card > 21){
-				// bust
-				this.hand = 0;
+		}
+		else{
+			if(cur_card == card){
+				this.hand = 24 + card;
+			}
+			else if(cur_card == 11){
+				if(card == 10){
+					// No blackjack but sum 21
+					this.hand = 36;
+				}
+				else{
+					this.hand = 16 + card;
+				}
 			}
 			else{
-				this.hand = this.hand + card;
+				this.hand = cur_card + card - 3;
 			}
-
 		}
 	}
     
