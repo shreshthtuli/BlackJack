@@ -13,10 +13,48 @@ public class Model{
         form_dealer_prob();
     }
 
-    void form_dealer_prob(){
-        for(int mysum = 4; mysum <= 30; mysum++){
-            for(int dealer = 2; dealer <= 11; dealer++){
+    double get_dealer_prob(int init_hand, int target){
+        //Base cases
+        State s = new State();
+        s.hand = init_hand;
+        Pair<Integer,Integer> p = new Pair<>(init_hand,target);
 
+        if(dealer_prob.get(p) != null){
+            return dealer_prob.get(p);
+        }
+
+        else if(s.stall() > target){
+            dealer_prob.put(p,0);
+        }
+
+        else if(s.stall() == target){
+            dealer_prob.put(p,1);
+        }
+
+        else{
+            ArrayList<Integer> actions = legalAction(s);
+            double prob = 0;
+            for(int i = 0; i < actions; i++){
+                if(action != SPLIT && action != DD){
+                    ArrayList<Pair<State, Double>> next_states = nextStates(s,actions[i]);
+                    for(int j = 0; j < next_states.size(); j++){
+                        prob += next_states.getValue().get_dealer_prob(s.hand,p.getValue());
+                    }
+                }
+            }
+            dealer_prob.put(p,prob);
+        }
+        return dealer_prob.get(p);
+    }
+
+    void form_dealer_prob(){
+        //iterate over all targets
+        for(int i = 17; i <= 23; i++){
+            //iterate over all initial hands
+            for(int j = 2; j <= 11; j++){
+                Pair<Integer,Integer> p = new Pair<Integer,Integer>(j,i);
+                double prob = get_dealer_prob(j,i);
+                dealer_prob.put(p,prob);
             }
         }
     }
