@@ -10,6 +10,15 @@ public class Model{
 
     Model(double p){
         this.probability = p;
+        form_dealer_prob();
+    }
+
+    void form_dealer_prob(){
+        for(int mysum = 4; mysum <= 30; mysum++){
+            for(int dealer = 2; dealer <= 11; dealer++){
+                
+            }
+        }
     }
 
     ArrayList<Integer> legalAction(State s){
