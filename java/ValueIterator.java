@@ -90,6 +90,9 @@ public class ValueIterator{
         State sPrime, sPrime1;
         ArrayList< Pair<State,Double> > next_States = m.nextStates(s, a);
         double val = 0;
+        if(a == 1){
+            return m.getReward(s, 1);
+        }
         if(a == 2){
             for(int i = 0; i < next_States.size(); i++){
                 for(int j = 0; j < next_States.size(); j++){
