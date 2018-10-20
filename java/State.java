@@ -75,6 +75,9 @@ public class State{
 				// Transition from hard to soft
 				this.hand = cur_hand + 19;
 			}
+			else if(cur_hand == 7){
+				this.hand = 36;
+			}
 			else if(cur_hand < 17){
 				// Hard tp hard + 1
 				this.hand = cur_hand + 1;
@@ -132,7 +135,7 @@ public class State{
 				}
 				else if(cur_hand - 5 + card > 21){
 					// A becomes hard
-					this.hand = this.hand - 15 + card;
+					this.hand = this.hand - 18 + card;
 				}
 				else{
 					this.hand = 36;
@@ -159,7 +162,7 @@ public class State{
 					this.hand = 36;
 				}
 				else{
-					this.hand = 0;
+					this.hand = 9;
 				}
 			}
 		}
