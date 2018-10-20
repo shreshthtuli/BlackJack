@@ -14,6 +14,7 @@ public class Model{
     Model(double p){
         this.probability = p;
         this.dealer_prob = new HashMap<>();
+        this.temp_dealer_prob = new HashMap<>();
         // form_dealer_prob();
     }
     //22 is blackjack
@@ -218,8 +219,8 @@ public class Model{
     }
 
     public static void main(String[] args){
-        Model m = new Model(0.1);
-        double pr = m.get_dealer_prob(14,18);
+        Model m = new Model(0.7);
+        double pr = m.get_dealer_prob(13,17);
         System.out.println(pr);
     }
 }
