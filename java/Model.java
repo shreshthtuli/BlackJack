@@ -22,7 +22,7 @@ public class Model{
         State s = new State();
         s.hand = init_hand;
         Pair<Integer,Integer> p = new Pair<>(init_hand,target);
-        System.out.println(s.stand());
+        // System.out.println(s.stand());
         if(dealer_prob.containsKey(p)){
             return dealer_prob.get(p);
         }
@@ -66,7 +66,7 @@ public class Model{
         for(int i = 17; i <= 22; i++){
             //iterate over all initial hands
             for(int j = 2; j <= 11; j++){
-                ArrayList< Pair<Integer,double> > hands = getHands(j);
+                ArrayList< Pair<Integer,Double> > hands = cardToState(j);
                 double prob = 0;
                 for(int k = 0; k < hands.size(); k++){
                     int hand = hands.get(k).getKey();
@@ -131,6 +131,51 @@ public class Model{
             }
             double prob = (i == 10) ? weight * this.probability : weight * (1 - this.probability) / 9;
             ans.add(new Pair(news, prob));
+        }
+        return ans;
+    }
+
+    ArrayList<Pair<Integer, Double>> cardToState(int card){
+        ArrayList<Pair<Integer, Double>> ans = new ArrayList<>();
+        
+        if(card == 11){
+            // hit card is 2 to 9 so A2 to A9
+            for(int i = 2; i <= 9; i++){
+                ans.add(new Pair(16 + i, ((1 - this.probability) / 9)));
+            }
+            // hit card is face so BJ
+            ans.add(new Pair(37, this.probability));
+            // hit card is ace so AA
+            ans.add(new Pair(35, ((1 - this.probability) / 9)));
+        }
+        else{
+            // hit card is Ace
+            if(card == 10){
+                // BJ
+                ans.add(new Pair(37, ((1 - this.probability) / 9)));
+            }
+            else{
+                // A2 to A9
+                ans.add(new Pair(16 + card, ((1 - this.probability) / 9)));
+            }
+            // hit card is 2 to 9
+            for(int i = 2; i <= 9; i++){
+                if(card == i){
+                    // pair
+                    ans.add(new Pair(24 + i, ((1 - this.probability) / 9)));
+                }
+                else{
+                    ans.add(new Pair(card + i - 3, ((1 - this.probability) / 9)));
+                }
+            }
+            // hit card = 10
+            if(card == 10){
+                ans.add(new Pair(34, this.probability));
+            }
+            else{
+                ans.add(new Pair(card + 7, this.probability));
+            }
+            
         }
         return ans;
     }
