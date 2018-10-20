@@ -17,6 +17,7 @@ public class Model{
         this.temp_dealer_prob = new HashMap<>();
         // form_dealer_prob();
     }
+
     //22 is blackjack
     //23 is busted
     double get_dealer_prob(int init_hand, int target){
@@ -78,6 +79,7 @@ public class Model{
                         System.out.println("Equivalent hand: " + hand + " Target: " + i);
                     }
                     prob += get_dealer_prob(hand,i)*probability;
+                    
 
                 }
                 Pair<Integer,Integer> p = new Pair<Integer,Integer>(j,i);
@@ -230,4 +232,3 @@ public class Model{
         System.out.println(pr);
     }
 }
-

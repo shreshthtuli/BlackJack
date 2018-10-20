@@ -124,6 +124,30 @@ public class State{
 					this.hand = 36;
 				}
 			}
+			else if(cur_hand <= 34){
+				if(2*(cur_hand - 24) + card > 21){
+					// bust
+					this.hand = 0;
+				}
+				else if(2*(cur_hand - 24) + card < 21){
+					this.hand = 2*(cur_hand - 24) + card - 3;
+				}
+				else{
+					this.hand = 36;
+				}
+			}
+			else if(cur_hand == 35){
+				if(card <= 8){
+					// AA + card = A + (card + 1)
+					this.hand = 17 + card;
+				}
+				else if(card == 9){
+					this.hand = 36;
+				}
+				else{
+					this.hand = 0;
+				}
+			}
 		}
 	}
 
