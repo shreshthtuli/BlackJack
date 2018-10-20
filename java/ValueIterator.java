@@ -176,4 +176,12 @@ public class ValueIterator{
 
         updatePolicy();
     }
+
+    public static void main(String[] args){
+        ValueIterator v = new ValueIterator(0.7);
+        State s= new State();
+        s.hand = 0;
+        s.dealer_hand = 3;
+        v.find_all_states_helper(s);
+    }
 }

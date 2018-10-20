@@ -126,7 +126,7 @@ public class Model{
         int weight;
         State news;
 
-        if(a == STAND)
+        if(a == 1 || s.hand == 0)
             return ans;    
 
         for(int i = 2; i <= 11; i++){
@@ -227,8 +227,13 @@ public class Model{
 
     public static void main(String[] args){
         Model m = new Model(0.7);
-        // m.form_dealer_prob();
-        double pr = m.get_dealer_prob(17,20);
-        System.out.println(pr);
+        State s = new State();
+        s.hand = 35; s.dealer_hand = 4;
+        System.out.println(s.to_string());
+        System.out.println(m.legalAction(s));
+        ArrayList<Pair<State,Double>> ns = m.nextStates(s, 0);
+        for(Pair<State,Double> n : ns ){
+            System.out.println(n.getKey().hand  + "  " + n.getValue());
+        }
     }
 }
