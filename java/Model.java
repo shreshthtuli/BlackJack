@@ -12,8 +12,8 @@ public class Model{
 
     Model(double p){
         this.probability = p;
-        form_dealer_prob();
         this.dealer_prob = new HashMap<>();
+        form_dealer_prob();
     }
 
     double get_dealer_prob(int init_hand, int target){
