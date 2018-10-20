@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.lang.String;
 
 public class State{
 	
@@ -28,6 +29,19 @@ public class State{
 		this.dealer_hand = s.dealer_hand;
 		this.doubled = s.doubled;
 		this.ace_split = s.ace_split;
+	}
+
+	State(String str){
+		String[] arrOfStr = str.split(",", 4); 
+		this.hand = Integer.parseInt(arrOfStr[0]);
+		this.dealer_hand = Integer.parseInt(arrOfStr[1]);
+		this.doubled = Boolean.parseBoolean(arrOfStr[2]);
+		this.ace_split = Boolean.parseBoolean(arrOfStr[3]);
+	}
+
+	String to_string(){
+		String str = this.hand + "," + this.dealer_hand + "," + this.doubled + "," + this.ace_split;
+		return str;
 	}
 
 	int stand(){
