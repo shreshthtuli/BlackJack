@@ -30,6 +30,16 @@ public class Model{
             return temp_dealer_prob.get(p);
         }
 
+        else if(target == 22){
+            if(init_hand == 37){
+                System.out.println("vsvsv");
+               temp_dealer_prob.put(p,1.0); 
+            }
+            else{
+               temp_dealer_prob.put(p,0.0); 
+            }
+        }
+
         else if(s.stand() > target || (s.stand() >= 17 && s.stand() < target)){
             temp_dealer_prob.put(p,0.0);
         }
@@ -38,14 +48,6 @@ public class Model{
             temp_dealer_prob.put(p,1.0);
         }
 
-        else if(target == 22){
-            if(init_hand == 37){
-               temp_dealer_prob.put(p,1.0); 
-            }
-            else{
-               temp_dealer_prob.put(p,0.0); 
-            }
-        }
         else{
             ArrayList<Integer> actions = legalAction(s);
             double prob = 0;
@@ -229,7 +231,12 @@ public class Model{
         Model m = new Model(0.7);
         State s = new State();
         s.hand = 1; s.dealer_hand = 4;
-        System.out.println(m.getReward(s, 0));
-        System.out.println(m.dealer_prob);
+        // System.out.println("HERE :");
+        // Pair<Integer,Integer> p = new Pair<>(11,37);
+        // System.out.println("dbffd" + m.get_dealer_prob(37,22));
+        // for(int i = 17; i <= 23; i++){
+        //     Pair<Integer,Integer> p = new Pair<>(11,i);
+        //     System.out.println(i + " : " + m.dealer_prob.get(p));
+        // }
     }
 }
