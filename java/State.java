@@ -73,7 +73,7 @@ public class State{
 				// Next Ace is hard
 				this.hand = cur_hand + 1;
 			}
-			else if(cur_hand == 24){
+			else if(cur_hand == 25){
 				// A9 + A gives sum 21
 				this.hand = 36;
 			}

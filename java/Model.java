@@ -72,6 +72,11 @@ public class Model{
                 for(int k = 0; k < hands.size(); k++){
                     int hand = hands.get(k).getKey();
                     double probability = hands.get(k).getValue();
+                    System.out.println("Init hand: " + hand + " Target: " + i);
+                    if(hand >= 26 && hand <= 34){
+                        hand = (hand-26)*2 + 1;
+                        System.out.println("Equivalent hand: " + hand + " Target: " + i);
+                    }
                     prob += get_dealer_prob(hand,i)*probability;
 
                 }
@@ -220,7 +225,8 @@ public class Model{
 
     public static void main(String[] args){
         Model m = new Model(0.7);
-        double pr = m.get_dealer_prob(13,17);
+        // m.form_dealer_prob();
+        double pr = m.get_dealer_prob(17,20);
         System.out.println(pr);
     }
 }
