@@ -130,7 +130,7 @@ public class Model{
             switch(a){
                 case 0: news.hit(i); break;
                 case 3: news.double_down(i); break;
-                case 2: news.split(i); weight = 2; break;                            
+                case 2: news.split(i); weight = 1; break;                            
             }
             double prob = (i == 10) ? weight * this.probability : weight * (1 - this.probability) / 9;
             ans.add(new Pair(news, prob));

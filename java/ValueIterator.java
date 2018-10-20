@@ -25,6 +25,7 @@ public class ValueIterator{
 
     void print_policy(){
         for(int i = 1; i <= 37; i++){
+            System.out.print("Hand : " + i + "\t");
             for(int j = 2; j <= 11; j++){
                 State newState = new State();
                 newState.hand = i;
@@ -137,7 +138,11 @@ public class ValueIterator{
             State s = new State(str);
             // Get action vector for this state
             actions = m.legalAction(s);
-    
+            
+            if(actions.isEmpty()){
+                policy.put(str, 0); continue;
+            }
+
             aMax = actions.get(0);
             valMax = qStar(s, aMax);
             // Check best action
@@ -162,6 +167,7 @@ public class ValueIterator{
         // Compute values till residual < epsilon
         while(residual >= epsilon){
             // Iterate over all states
+            residual = 0;
             for(String str : value.keySet()){
                 State s = new State(str);
                 // Update value based on bellman equation

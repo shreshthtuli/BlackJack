@@ -8,7 +8,7 @@ public class Main{
 
         vi.iterate();
 
-        // vi.print_policy();
+        vi.print_policy();
 
     }
 }
