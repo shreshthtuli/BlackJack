@@ -8,12 +8,14 @@ public class Model{
     static int HIT = 0, STAND = 1, SPLIT = 2, DD = 3;
     double probability;
     HashMap<Pair<Integer, Integer>, Double> dealer_prob;
+    HashMap<Pair<Integer, Integer>, Double> temp_dealer_prob;
     static double bet = 1;
 
     Model(double p){
         this.probability = p;
         this.dealer_prob = new HashMap<>();
-        form_dealer_prob();
+        this.temp_dealer_prob = new HashMap<>();
+        // form_dealer_prob();
     }
 
     //22 is blackjack
@@ -24,24 +26,24 @@ public class Model{
         s.hand = init_hand;
         Pair<Integer,Integer> p = new Pair<>(init_hand,target);
         // System.out.println(s.stand());
-        if(dealer_prob.containsKey(p)){
-            return dealer_prob.get(p);
+        if(temp_dealer_prob.containsKey(p)){
+            return temp_dealer_prob.get(p);
         }
 
         else if(s.stand() > target || (s.stand() >= 17 && s.stand() < target)){
-            dealer_prob.put(p,0.0);
+            temp_dealer_prob.put(p,0.0);
         }
 
         else if(s.stand() == target){
-            dealer_prob.put(p,1.0);
+            temp_dealer_prob.put(p,1.0);
         }
 
         else if(target == 22){
             if(init_hand == 37){
-               dealer_prob.put(p,1.0); 
+               temp_dealer_prob.put(p,1.0); 
             }
             else{
-               dealer_prob.put(p,0.0); 
+               temp_dealer_prob.put(p,0.0); 
             }
         }
         else{
@@ -56,12 +58,11 @@ public class Model{
                     }
                 }
             }
-            dealer_prob.put(p,prob);
+            temp_dealer_prob.put(p,prob);
         }
-        return dealer_prob.get(p);
+        return temp_dealer_prob.get(p);
     }
 
-    //40 is mapped to 2, 41 to 3......
     void form_dealer_prob(){
         //iterate over all targets
         for(int i = 17; i <= 22; i++){
@@ -76,7 +77,7 @@ public class Model{
                     
 
                 }
-                Pair<Integer,Integer> p = new Pair<Integer,Integer>(j+38,i);
+                Pair<Integer,Integer> p = new Pair<Integer,Integer>(j,i);
                 dealer_prob.put(p,prob);
             }
         }
@@ -84,10 +85,10 @@ public class Model{
         for(int i = 2; i <= 11; i++){
             double proba = 1.0;
             for(int j = 17; j <= 22; j++){
-                Pair<Integer,Integer> p = new Pair<Integer,Integer>(i+38,j);
+                Pair<Integer,Integer> p = new Pair<Integer,Integer>(i,j);
                 proba -= dealer_prob.get(p);
             }
-            Pair<Integer,Integer> p1 = new Pair<Integer,Integer>(i+38,23);
+            Pair<Integer,Integer> p1 = new Pair<Integer,Integer>(i,23);
             dealer_prob.put(p1,proba);
         }
     }
@@ -220,8 +221,8 @@ public class Model{
     }
 
     public static void main(String[] args){
-        Model m = new Model(0.4);
-        double pr = m.get_dealer_prob(3,17);
+        Model m = new Model(0.7);
+        double pr = m.get_dealer_prob(13,17);
         System.out.println(pr);
     }
 }
