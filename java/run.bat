@@ -1,3 +1,3 @@
 rm *.class
 javac Main.java
-java Main 0.6
+java Main 0.307

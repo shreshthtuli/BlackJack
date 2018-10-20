@@ -8,7 +8,7 @@ import javafx.util.Pair;
 
 public class ValueIterator{
 
-    static double epsilon = 0.002;
+    static double epsilon = 0.00000000002;
     HashMap <String, Double> value;
     HashMap <String, Integer> policy;
     ArrayList<State> allStates;
@@ -25,6 +25,7 @@ public class ValueIterator{
 
     void print_policy(){
         for(int i = 1; i <= 37; i++){
+            System.out.print("Hand : " + i + "\t");
             for(int j = 2; j <= 11; j++){
                 State newState = new State();
                 newState.hand = i;
@@ -85,19 +86,33 @@ public class ValueIterator{
     }
 
     double qStar(State s, int a){
-        State sPrime;
-        double prob;
+        double prob, prob1;
+        State sPrime, sPrime1;
         ArrayList< Pair<State,Double> > next_States = m.nextStates(s, a);
         double val = 0;
+        if(a == 2){
+            for(int i = 0; i < next_States.size(); i++){
+                for(int j = 0; j < next_States.size(); j++){
+                    sPrime = next_States.get(i).getKey();
+                    sPrime1 = next_States.get(j).getKey();
+                    prob = next_States.get(i).getValue();
+                    prob1 = next_States.get(j).getValue();
+                    val += (m.getReward(sPrime, a) + value.get(sPrime.to_string())
+                         + m.getReward(sPrime1, a) + value.get(sPrime1.to_string())) * prob * prob1;
+                }
+            }
+            return val;
+        }
+        
         // Iterate on all next states
         for(int j = 0; j < next_States.size(); j++){
             sPrime = next_States.get(j).getKey(); // s'
             prob = next_States.get(j).getValue(); // T(s, pi(s), s')        
             // System.out.println(sPrime.to_string() + "  " + value.get(sPrime.to_string()));
             if(sPrime.hand != 0)    
-                val += prob * (m.getReward(sPrime) + value.get(sPrime.to_string()));
+                val += prob * (m.getReward(sPrime, a) + value.get(sPrime.to_string()));
             else
-                val += prob * m.getReward(sPrime);
+                val += prob * m.getReward(sPrime, a);
         }
         return val;
     }
@@ -106,8 +121,8 @@ public class ValueIterator{
     {
         ArrayList<Integer> actions = m.legalAction(s);
 
-        if(actions.size() == 0 || s.hand == 0)
-            return m.getReward(s);
+        if(actions.size() == 0)
+            return m.getReward(s, 1);
 
         int a, aMax;
         double val, valMax;
@@ -137,14 +152,18 @@ public class ValueIterator{
             State s = new State(str);
             // Get action vector for this state
             actions = m.legalAction(s);
-    
+            
+            if(actions.isEmpty()){
+                policy.put(str, 0); continue;
+            }
+
             aMax = actions.get(0);
             valMax = qStar(s, aMax);
             // Check best action
             for(int i = 0; i < actions.size(); i++){
                 a = actions.get(i);
                 val = qStar(s, a);
-                if(val > valMax){
+                if(val >= valMax){
                     valMax = val;
                     aMax = a;
                 }
@@ -162,6 +181,7 @@ public class ValueIterator{
         // Compute values till residual < epsilon
         while(residual >= epsilon){
             // Iterate over all states
+            residual = 0;
             for(String str : value.keySet()){
                 State s = new State(str);
                 // Update value based on bellman equation

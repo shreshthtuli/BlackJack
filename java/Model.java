@@ -123,7 +123,6 @@ public class Model{
     ArrayList<Pair<State, Double>> nextStates(State s, int a){
 
         ArrayList<Pair<State, Double>> ans = new ArrayList<>();
-        int weight;
         State news;
 
         if(a == 1 || s.hand == 0)
@@ -131,13 +130,12 @@ public class Model{
 
         for(int i = 2; i <= 11; i++){
             news = new State(s);
-            weight = 1;
             switch(a){
                 case 0: news.hit(i); break;
                 case 3: news.double_down(i); break;
-                case 2: news.split(i); weight = 2; break;                            
+                case 2: news.split(i); break;                            
             }
-            double prob = (i == 10) ? weight * this.probability : weight * (1 - this.probability) / 9;
+            double prob = (i == 10) ? this.probability : (1 - this.probability) / 9;
             ans.add(new Pair(news, prob));
         }
         return ans;
@@ -217,7 +215,9 @@ public class Model{
         return 0;
     }
 
-    double getReward(State s){
+    double getReward(State s, int a){
+        if(!(a == 1 || s.hand == 0))
+            return 0.0;
         double reward = 0;
         for(int i = 17; i <= 23; i++)
             reward += dealer_prob.get(new Pair(s.dealer_hand, i)) * rewardHelper(s, i);
@@ -228,12 +228,8 @@ public class Model{
     public static void main(String[] args){
         Model m = new Model(0.7);
         State s = new State();
-        s.hand = 35; s.dealer_hand = 4;
-        System.out.println(s.to_string());
-        System.out.println(m.legalAction(s));
-        ArrayList<Pair<State,Double>> ns = m.nextStates(s, 0);
-        for(Pair<State,Double> n : ns ){
-            System.out.println(n.getKey().hand  + "  " + n.getValue());
-        }
+        s.hand = 1; s.dealer_hand = 4;
+        System.out.println(m.getReward(s, 0));
+        System.out.println(m.dealer_prob);
     }
 }
