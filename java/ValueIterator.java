@@ -24,7 +24,9 @@ public class ValueIterator{
     }
 
     void print_policy(){
-        for(int i = 1; i <= 37; i++){
+        for(int i = 2; i <= 35; i++){
+            if(i == 20)
+                continue;
             System.out.print("Hand : " + i + "\t");
             for(int j = 2; j <= 11; j++){
                 State newState = new State();
@@ -36,32 +38,32 @@ public class ValueIterator{
         }
     }
 
-    void find_all_states_helper(State s){
-        if(allStates.contains(s))
-            return;
+    // void find_all_states_helper(State s){
+    //     if(allStates.contains(s))
+    //         return;
 
-        allStates.add(s);
-        ArrayList<Integer> actions = this.m.legalAction(s);
-        ArrayList< Pair<State,Double> > nextState;
+    //     allStates.add(s);
+    //     ArrayList<Integer> actions = this.m.legalAction(s);
+    //     ArrayList< Pair<State,Double> > nextState;
 
-        for(int i = 0; i < actions.size(); i++){
-            nextState = m.nextStates(s, actions.get(i));
-            for(int j = 0; j < nextState.size(); j++){
-                find_all_states_helper(nextState.get(j).getKey());
-            }
-        } 
-    }
+    //     for(int i = 0; i < actions.size(); i++){
+    //         nextState = m.nextStates(s, actions.get(i));
+    //         for(int j = 0; j < nextState.size(); j++){
+    //             find_all_states_helper(nextState.get(j).getKey());
+    //         }
+    //     } 
+    // }
 
-    void find_all_states(){
-        for(int i = 1; i <= 37; i++){
-            for(int j = 2; j <= 11; j++){
-                State newState = new State();
-                newState.hand = i;
-                newState.dealer_hand = j;
-                find_all_states_helper(newState);
-            }
-        }
-    }
+    // void find_all_states(){
+    //     for(int i = 1; i <= 37; i++){
+    //         for(int j = 2; j <= 11; j++){
+    //             State newState = new State();
+    //             newState.hand = i;
+    //             newState.dealer_hand = j;
+    //             find_all_states_helper(newState);
+    //         }
+    //     }
+    // }
 
     void initialise_value(){
         for(int i = 1; i <= 37; i++){
