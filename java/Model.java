@@ -109,7 +109,7 @@ public class Model{
     }
 
     ArrayList<Pair<Integer, Double>> cardToState(int card){
-        ArrayList<Pair<State, Double>> ans = new ArrayList<>();
+        ArrayList<Pair<Integer, Double>> ans = new ArrayList<>();
         
         if(card == 11){
             // hit card is 2 to 9 so A2 to A9
@@ -135,7 +135,7 @@ public class Model{
             for(int i = 2; i <= 9; i++){
                 if(card == i){
                     // pair
-                    and.add(new Pair(24 + i, ((1 - this.probability) / 9)));
+                    ans.add(new Pair(24 + i, ((1 - this.probability) / 9)));
                 }
                 else{
                     ans.add(new Pair(card + i - 3, ((1 - this.probability) / 9)));
@@ -143,10 +143,10 @@ public class Model{
             }
             // hit card = 10
             if(card == 10){
-                and.add(new Pair(34, this.probability));
+                ans.add(new Pair(34, this.probability));
             }
             else{
-                and.add(new Pair(card + 7, this.probability));
+                ans.add(new Pair(card + 7, this.probability));
             }
             
         }
