@@ -15,6 +15,7 @@ public class Model{
         this.dealer_prob = new HashMap<>();
         form_dealer_prob();
     }
+
     //22 is blackjack
     //23 is busted
     double get_dealer_prob(int init_hand, int target){
@@ -72,6 +73,7 @@ public class Model{
                     int hand = hands.get(k).getKey();
                     double probability = hands.get(k).getValue();
                     prob += get_dealer_prob(hand,i)*probability;
+                    
 
                 }
                 Pair<Integer,Integer> p = new Pair<Integer,Integer>(j+38,i);
@@ -218,9 +220,8 @@ public class Model{
     }
 
     public static void main(String[] args){
-        Model m = new Model(0.1);
-        double pr = m.get_dealer_prob(2,17);
+        Model m = new Model(0.4);
+        double pr = m.get_dealer_prob(3,17);
         System.out.println(pr);
     }
 }
-
