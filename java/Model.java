@@ -30,8 +30,8 @@ public class Model{
             return temp_dealer_prob.get(p);
         }
 
-        else if(target == 22){
-            if(init_hand == 37){
+        else if(init_hand == 37){
+            if(target == 22){
                 System.out.println("vsvsv");
                temp_dealer_prob.put(p,1.0); 
             }
@@ -231,9 +231,9 @@ public class Model{
         Model m = new Model(0.7);
         State s = new State();
         s.hand = 1; s.dealer_hand = 4;
-        // System.out.println("HERE :");
-        // Pair<Integer,Integer> p = new Pair<>(11,37);
-        // System.out.println("dbffd" + m.get_dealer_prob(37,22));
+        // // System.out.println("HERE :");
+        // // Pair<Integer,Integer> p = new Pair<>(11,37);
+        // System.out.println("dbffd" + m.get_dealer_prob(37,21));
         // for(int i = 17; i <= 23; i++){
         //     Pair<Integer,Integer> p = new Pair<>(11,i);
         //     System.out.println(i + " : " + m.dealer_prob.get(p));
