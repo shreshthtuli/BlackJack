@@ -15,18 +15,19 @@ public class Model{
         this.dealer_prob = new HashMap<>();
         form_dealer_prob();
     }
-
+    //22 is blackjack
+    //23 is busted
     double get_dealer_prob(int init_hand, int target){
         //Base cases
         State s = new State();
         s.hand = init_hand;
         Pair<Integer,Integer> p = new Pair<>(init_hand,target);
-
+        System.out.println(s.stand());
         if(dealer_prob.containsKey(p)){
             return dealer_prob.get(p);
         }
 
-        else if(s.stand() > target){
+        else if(s.stand() > target || (s.stand() >= 17 && s.stand() < target)){
             dealer_prob.put(p,0.0);
         }
 
@@ -34,6 +35,14 @@ public class Model{
             dealer_prob.put(p,1.0);
         }
 
+        else if(target == 22){
+            if(init_hand == 37){
+               dealer_prob.put(p,1.0); 
+            }
+            else{
+               dealer_prob.put(p,0.0); 
+            }
+        }
         else{
             ArrayList<Integer> actions = legalAction(s);
             double prob = 0;
@@ -42,7 +51,7 @@ public class Model{
                 if(action != SPLIT && action != DD){
                     ArrayList<Pair<State, Double>> next_states = nextStates(s,action);
                     for(int j = 0; j < next_states.size(); j++){
-                        prob += next_states.get(j).getValue()*get_dealer_prob(s.hand,p.getValue());
+                        prob += next_states.get(j).getValue()*get_dealer_prob(next_states.get(j).getKey().hand,p.getValue());
                     }
                 }
             }
@@ -51,15 +60,33 @@ public class Model{
         return dealer_prob.get(p);
     }
 
+    //40 is mapped to 2, 41 to 3......
     void form_dealer_prob(){
         //iterate over all targets
-        for(int i = 17; i <= 23; i++){
+        for(int i = 17; i <= 22; i++){
             //iterate over all initial hands
             for(int j = 2; j <= 11; j++){
-                Pair<Integer,Integer> p = new Pair<Integer,Integer>(j,i);
-                double prob = get_dealer_prob(j,i);
+                ArrayList< Pair<Integer,double> > hands = getHands(j);
+                double prob = 0;
+                for(int k = 0; k < hands.size(); k++){
+                    int hand = hands.get(k).getKey();
+                    double probability = hands.get(k).getValue();
+                    prob += get_dealer_prob(hand,i)*probability;
+
+                }
+                Pair<Integer,Integer> p = new Pair<Integer,Integer>(j+38,i);
                 dealer_prob.put(p,prob);
             }
+        }
+        //now calculate bust probability
+        for(int i = 2; i <= 11; i++){
+            double proba = 1.0;
+            for(int j = 17; j <= 22; j++){
+                Pair<Integer,Integer> p = new Pair<Integer,Integer>(i+38,j);
+                proba -= dealer_prob.get(p);
+            }
+            Pair<Integer,Integer> p1 = new Pair<Integer,Integer>(i+38,23);
+            dealer_prob.put(p1,proba);
         }
     }
 
@@ -143,6 +170,12 @@ public class Model{
             reward += dealer_prob.get(new Pair(s.dealer_hand, i)) * rewardHelper(s, i);
 
         return reward;
+    }
+
+    public static void main(String[] args){
+        Model m = new Model(0.1);
+        double pr = m.get_dealer_prob(2,17);
+        System.out.println(pr);
     }
 }
 
