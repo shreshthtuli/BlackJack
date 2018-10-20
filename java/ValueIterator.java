@@ -8,7 +8,7 @@ import javafx.util.Pair;
 
 public class ValueIterator{
 
-    static double epsilon = 0.002;
+    static double epsilon = 0.000002;
     HashMap <String, Double> value;
     HashMap <String, Integer> policy;
     ArrayList<State> allStates;
@@ -149,7 +149,7 @@ public class ValueIterator{
             for(int i = 0; i < actions.size(); i++){
                 a = actions.get(i);
                 val = qStar(s, a);
-                if(val > valMax){
+                if(val >= valMax){
                     valMax = val;
                     aMax = a;
                 }
