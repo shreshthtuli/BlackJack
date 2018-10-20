@@ -9,8 +9,8 @@ import javafx.util.Pair;
 public class ValueIterator{
 
     static double epsilon = 0.002;
-    HashMap <State, Double> value;
-    HashMap <State, Integer> policy;
+    HashMap <String, Double> value;
+    HashMap <String, Integer> policy;
     ArrayList<State> allStates;
     Model m;
 
@@ -19,7 +19,7 @@ public class ValueIterator{
         this.policy = new HashMap<>();
         this.allStates = new ArrayList<>();
         this.m = new Model(p);
-        this.find_all_states();
+        // this.find_all_states();
         this.initialise_value();
     }
 
@@ -29,13 +29,16 @@ public class ValueIterator{
                 State newState = new State();
                 newState.hand = i;
                 newState.dealer_hand = j;
-                System.out.print(policy.get(newState) + " ");
+                System.out.print(policy.get(newState.to_string()) + " ");
             }
             System.out.println();
         }
     }
 
     void find_all_states_helper(State s){
+        if(allStates.contains(s))
+            return;
+
         allStates.add(s);
         ArrayList<Integer> actions = this.m.legalAction(s);
         ArrayList< Pair<State,Double> > nextState;
@@ -60,8 +63,24 @@ public class ValueIterator{
     }
 
     void initialise_value(){
-        for(int i = 0; i < allStates.size(); i++){
-            value.put(allStates.get(i), 0.0);
+        for(int i = 1; i <= 37; i++){
+            for(int j = 2; j <= 11; j++){
+                // System.out.println(allStates.size());
+                State newState = new State();
+                newState.hand = i;
+                newState.dealer_hand = j;
+                value.put(newState.to_string(), 0.0);
+
+                newState.doubled = true;
+                value.put(newState.to_string(), 0.0);
+
+                newState.doubled = false;
+                newState.ace_split = true;
+                value.put(newState.to_string(), 0.0);
+
+                newState.doubled = true;
+                value.put(newState.to_string(), 0.0);
+            }
         }
     }
 
@@ -73,8 +92,12 @@ public class ValueIterator{
         // Iterate on all next states
         for(int j = 0; j < next_States.size(); j++){
             sPrime = next_States.get(j).getKey(); // s'
-            prob = next_States.get(j).getValue(); // T(s, pi(s), s')
-            val += prob * (m.getReward(sPrime) + value.get(sPrime));
+            prob = next_States.get(j).getValue(); // T(s, pi(s), s')        
+            // System.out.println(sPrime.to_string() + "  " + value.get(sPrime.to_string()));
+            if(sPrime.hand != 0)    
+                val += prob * (m.getReward(sPrime) + value.get(sPrime.to_string()));
+            else
+                val += prob * m.getReward(sPrime);
         }
         return val;
     }
@@ -83,7 +106,7 @@ public class ValueIterator{
     {
         ArrayList<Integer> actions = m.legalAction(s);
 
-        if(actions.size() == 0)
+        if(actions.size() == 0 || s.hand == 0)
             return m.getReward(s);
 
         int a, aMax;
@@ -110,7 +133,8 @@ public class ValueIterator{
         double val, valMax;
     
         // Iterate over all states
-        for(State s : value.keySet()){
+        for(String str : value.keySet()){
+            State s = new State(str);
             // Get action vector for this state
             actions = m.legalAction(s);
     
@@ -126,24 +150,26 @@ public class ValueIterator{
                 }
             }
             // Update policy
-            policy.put(s, aMax);
+            policy.put(str, aMax);
         }
     }
 
     void iterate()
     {
         double residual = epsilon;
-        HashMap <State, Double> nextValue = new HashMap<>(value);
+        HashMap <String, Double> nextValue = new HashMap<>(value);
     
         // Compute values till residual < epsilon
         while(residual >= epsilon){
             // Iterate over all states
-            for(State s : value.keySet()){
+            for(String str : value.keySet()){
+                State s = new State(str);
                 // Update value based on bellman equation
-                nextValue.replace(s, vStar(s));
+                nextValue.replace(str, vStar(s));
                 // Calculate residual
-                residual = Math.max(residual, Math.abs(nextValue.get(s) - value.get(s)));
+                residual = Math.max(residual, Math.abs(nextValue.get(str) - value.get(str)));
             }
+            System.out.println(residual);
             // Update value to next value
             value = (HashMap)nextValue.clone();
         }

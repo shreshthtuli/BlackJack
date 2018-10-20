@@ -15,7 +15,7 @@ public class Model{
         this.probability = p;
         this.dealer_prob = new HashMap<>();
         this.temp_dealer_prob = new HashMap<>();
-        // form_dealer_prob();
+        form_dealer_prob();
     }
 
     //22 is blackjack
