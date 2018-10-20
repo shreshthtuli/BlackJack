@@ -32,7 +32,14 @@ public class ValueIterator{
                 State newState = new State();
                 newState.hand = i;
                 newState.dealer_hand = j;
-                System.out.print(policy.get(newState.to_string()) + " ");
+                int a = policy.get(newState.to_string());
+                switch (a){
+                    case 0 : System.out.print("H "); break;
+                    case 1 : System.out.print("S "); break;
+                    case 2 : System.out.print("P "); break;
+                    case 3 : System.out.print("D "); break;
+                }
+                
             }
             System.out.println();
         }
@@ -205,8 +212,6 @@ public class ValueIterator{
     public static void main(String[] args){
         ValueIterator v = new ValueIterator(0.7);
         State s= new State();
-        s.hand = 0;
-        s.dealer_hand = 3;
-        v.find_all_states_helper(s);
+
     }
 }

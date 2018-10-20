@@ -82,7 +82,6 @@ public class Model{
                     }
                     prob += get_dealer_prob(hand,i)*probability;
                     
-
                 }
                 Pair<Integer,Integer> p = new Pair<Integer,Integer>(j,i);
                 dealer_prob.put(p,prob);
@@ -191,6 +190,7 @@ public class Model{
     double rewardHelper(State s, int dealer_sum){
         int my_sum = s.stand();
         boolean blackjack = (s.hand == 37);
+        int bet = (s.doubled) ? 2 : 1;
 
         // Check blackjack
         if(blackjack && dealer_sum == 22)
