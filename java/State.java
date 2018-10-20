@@ -23,6 +23,13 @@ public class State{
 		this.ace_split = false;
 	}
 
+	State(State s){
+		this.hand = s.hand;
+		this.dealer_hand = s.dealer_hand;
+		this.doubled = s.doubled;
+		this.ace_split = s.ace_split;
+	}
+
 	int stand(){
 		// Return sum
 		if(this.hand <= 17){

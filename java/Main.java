@@ -2,7 +2,7 @@
 public class Main{
     public static void main(String[] args) {
         
-        double probability = args[1];
+        double probability = Double.parseDouble(args[0]);
         ValueIterator vi = new ValueIterator(probability);
 
         vi.iterate();

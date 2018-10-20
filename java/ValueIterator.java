@@ -4,6 +4,8 @@ import java.util.function.DoubleToLongFunction;
 
 import javax.lang.model.type.NullType;
 
+import javafx.util.Pair;
+
 public class ValueIterator{
 
     static double epsilon = 0.002;
@@ -34,14 +36,14 @@ public class ValueIterator{
     }
 
     void find_all_states_helper(State s){
-        allStates.insert(s);
-        ArrayList<Integer> actions = m.legalActions(s);
+        allStates.add(s);
+        ArrayList<Integer> actions = this.m.legalAction(s);
         ArrayList< Pair<State,Double> > nextState;
 
         for(int i = 0; i < actions.size(); i++){
-            nextState = m.next_States(s, actions.at(i));
+            nextState = m.nextStates(s, actions.get(i));
             for(int j = 0; j < nextState.size(); j++){
-                find_all_states_helper(nextState.at(j).first);
+                find_all_states_helper(nextState.get(j).getKey());
             }
         } 
     }
@@ -59,39 +61,39 @@ public class ValueIterator{
 
     void initialise_value(){
         for(int i = 0; i < allStates.size(); i++){
-            value.put(allStates.at(i), 0);
+            value.put(allStates.get(i), 0.0);
         }
     }
 
     double qStar(State s, int a){
         State sPrime;
         double prob;
-        ArrayList< Pair<State,Double> > next_States = m.next_States(s, a);
+        ArrayList< Pair<State,Double> > next_States = m.nextStates(s, a);
         double val = 0;
         // Iterate on all next states
         for(int j = 0; j < next_States.size(); j++){
-            sPrime = next_States.at(j).first; // s'
-            prob = next_States.at(j).second; // T(s, pi(s), s')
-            val += prob * (m.get_reward(sPrime) + value.get(sPrime));
+            sPrime = next_States.get(j).getKey(); // s'
+            prob = next_States.get(j).getValue(); // T(s, pi(s), s')
+            val += prob * (m.getReward(sPrime) + value.get(sPrime));
         }
         return val;
     }
 
     double vStar(State s)
     {
-        ArrayList<Integer> actions = m.legalActions(s);
+        ArrayList<Integer> actions = m.legalAction(s);
 
         if(actions.size() == 0)
-            return m.get_reward(s);
+            return m.getReward(s);
 
         int a, aMax;
         double val, valMax;
 
-        aMax = actions.at(0);
+        aMax = actions.get(0);
         valMax = qStar(s, aMax);
         // Iterate over all action
         for(int i = 0; i < actions.size(); i++){
-            a = actions.at(i);
+            a = actions.get(i);
             val = this.qStar(s, a);
             if(val > valMax){
                 valMax = val;
@@ -110,14 +112,14 @@ public class ValueIterator{
         // Iterate over all states
         for(State s : value.keySet()){
             // Get action vector for this state
-            actions = m.legalActions(s);
+            actions = m.legalAction(s);
     
-            aMax = actions.at(0);
-            valMax = qStar(itr.first, aMax);
+            aMax = actions.get(0);
+            valMax = qStar(s, aMax);
             // Check best action
             for(int i = 0; i < actions.size(); i++){
-                a = actions.at(i);
-                val = qStar(itr.first, a);
+                a = actions.get(i);
+                val = qStar(s, a);
                 if(val > valMax){
                     valMax = val;
                     aMax = a;
@@ -140,7 +142,7 @@ public class ValueIterator{
                 // Update value based on bellman equation
                 nextValue.replace(s, vStar(s));
                 // Calculate residual
-                residual = max(residual, abs(nextValue.get(curState) - value.get(curState)));
+                residual = Math.max(residual, Math.abs(nextValue.get(s) - value.get(s)));
             }
             // Update value to next value
             value = (HashMap)nextValue.clone();

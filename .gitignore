@@ -33,3 +33,6 @@
 
 # Hidden MacOS files
 .DS_Store
+
+# Java class
+*.class

@@ -1,9 +1,7 @@
 import java.util.ArrayList;
 import java.util.*;
 import javafx.util.*; 
-
-
-import com.sun.swing.internal.plaf.metal.resources.metal;
+import javafx.util.Pair;
 
 public class Model{
 
@@ -15,6 +13,7 @@ public class Model{
     Model(double p){
         this.probability = p;
         form_dealer_prob();
+        this.dealer_prob = new HashMap<>();
     }
 
     double get_dealer_prob(int init_hand, int target){
@@ -23,11 +22,11 @@ public class Model{
         s.hand = init_hand;
         Pair<Integer,Integer> p = new Pair<>(init_hand,target);
 
-        if(dealer_prob.get(p) != null){
+        if(dealer_prob.containsKey(p)){
             return dealer_prob.get(p);
         }
 
-        else if(s.stall() > target){
+        else if(s.stand() > target){
             dealer_prob.put(p,0.0);
         }
 
@@ -38,12 +37,12 @@ public class Model{
         else{
             ArrayList<Integer> actions = legalAction(s);
             double prob = 0;
-            for(int i = 0; i < actions; i++){
+            for(int i = 0; i < actions.size(); i++){
                 int action = actions.get(i);
                 if(action != SPLIT && action != DD){
                     ArrayList<Pair<State, Double>> next_states = nextStates(s,action);
                     for(int j = 0; j < next_states.size(); j++){
-                        prob += next_states.get(j).getValue().get_dealer_prob(s.hand,p.getValue());
+                        prob += next_states.get(j).getValue()*get_dealer_prob(s.hand,p.getValue());
                     }
                 }
             }
@@ -72,7 +71,7 @@ public class Model{
             return actions;
         }
 
-        if(s.hand >= 26 && s.hand <= 35 && this.ace_split == false){
+        if(s.hand >= 26 && s.hand <= 35 && s.ace_split == false){
             actions.add(SPLIT);
         }   
 
@@ -90,20 +89,21 @@ public class Model{
 
         ArrayList<Pair<State, Double>> ans = new ArrayList<>();
         int weight;
+        State news;
 
         if(a == STAND)
             return ans;    
 
         for(int i = 2; i <= 11; i++){
-            State news = new State(s);
+            news = new State(s);
             weight = 1;
             switch(a){
-                case HIT: news.hit(i); break;
-                case DD: news.double_down(i); break;
-                case SPLIT: news.split(i); weight = 2; break;                            
+                case 0: news.hit(i); break;
+                case 3: news.double_down(i); break;
+                case 2: news.split(i); weight = 2; break;                            
             }
             double prob = (i == 10) ? weight * this.probability : weight * (1 - this.probability) / 9;
-            ans.add(Pair(news, prob));
+            ans.add(new Pair(news, prob));
         }
         return ans;
     }
@@ -140,7 +140,7 @@ public class Model{
     double getReward(State s){
         double reward = 0;
         for(int i = 17; i <= 23; i++)
-            reward += dealer_prob.get(Pair(s.dealer_hand, i)) * rewardHelper(s, i);
+            reward += dealer_prob.get(new Pair(s.dealer_hand, i)) * rewardHelper(s, i);
 
         return reward;
     }
