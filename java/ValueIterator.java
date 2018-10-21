@@ -84,19 +84,18 @@ public class ValueIterator{
                     sPrime1 = next_States.get(j).getKey();
                     prob = next_States.get(i).getValue();
                     prob1 = next_States.get(j).getValue();
-                    val += (m.getReward(sPrime, a) + value.get(sPrime.to_string())
-                         + m.getReward(sPrime1, a) + value.get(sPrime1.to_string())) * prob * prob1;
+                    val += (value.get(sPrime.to_string())
+                         + value.get(sPrime1.to_string())) * prob * prob1;
                 }
             }
             return val;
         }
-        
         // Iterate on all next states
         for(int j = 0; j < next_States.size(); j++){
             sPrime = next_States.get(j).getKey(); // s'
             prob = next_States.get(j).getValue(); // T(s, pi(s), s')        
             if(sPrime.hand != 0)    
-                val += prob * (m.getReward(sPrime, a) + value.get(sPrime.to_string()));
+                val += prob * (value.get(sPrime.to_string()));
             else
                 val += prob * m.getReward(sPrime, a);
         }
