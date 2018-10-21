@@ -13,13 +13,15 @@ public class ValueIterator{
     HashMap <String, Integer> policy;
     ArrayList<State> allStates;
     Model m;
+    String[] convert = {"bust", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
+        "14", "15", "16", "17", "18", "19", "20", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9",
+        "22", "33", "44", "55", "66", "77", "88", "99", "1010", "AA", "21", "BJ"};
 
     ValueIterator(double p){
         this.value = new HashMap<>();
         this.policy = new HashMap<>();
         this.allStates = new ArrayList<>();
         this.m = new Model(p);
-        // this.find_all_states();
         this.initialise_value();
     }
 
@@ -27,7 +29,7 @@ public class ValueIterator{
         for(int i = 2; i <= 35; i++){
             if(i == 20)
                 continue;
-            System.out.print("Hand : " + i + "\t");
+            System.out.print(convert[i] + "\t");
             for(int j = 2; j <= 11; j++){
                 State newState = new State();
                 newState.hand = i;
@@ -44,33 +46,6 @@ public class ValueIterator{
             System.out.println();
         }
     }
-
-    // void find_all_states_helper(State s){
-    //     if(allStates.contains(s))
-    //         return;
-
-    //     allStates.add(s);
-    //     ArrayList<Integer> actions = this.m.legalAction(s);
-    //     ArrayList< Pair<State,Double> > nextState;
-
-    //     for(int i = 0; i < actions.size(); i++){
-    //         nextState = m.nextStates(s, actions.get(i));
-    //         for(int j = 0; j < nextState.size(); j++){
-    //             find_all_states_helper(nextState.get(j).getKey());
-    //         }
-    //     } 
-    // }
-
-    // void find_all_states(){
-    //     for(int i = 1; i <= 37; i++){
-    //         for(int j = 2; j <= 11; j++){
-    //             State newState = new State();
-    //             newState.hand = i;
-    //             newState.dealer_hand = j;
-    //             find_all_states_helper(newState);
-    //         }
-    //     }
-    // }
 
     void initialise_value(){
         for(int i = 1; i <= 37; i++){
@@ -120,7 +95,6 @@ public class ValueIterator{
         for(int j = 0; j < next_States.size(); j++){
             sPrime = next_States.get(j).getKey(); // s'
             prob = next_States.get(j).getValue(); // T(s, pi(s), s')        
-            // System.out.println(sPrime.to_string() + "  " + value.get(sPrime.to_string()));
             if(sPrime.hand != 0)    
                 val += prob * (m.getReward(sPrime, a) + value.get(sPrime.to_string()));
             else
@@ -189,9 +163,10 @@ public class ValueIterator{
     {
         double residual = epsilon;
         HashMap <String, Double> nextValue = new HashMap<>(value);
+        int iteration_no = 0;
     
         // Compute values till residual < epsilon
-        while(residual >= epsilon){
+        while(residual >= epsilon && iteration_no < 500){
             // Iterate over all states
             residual = 0;
             for(String str : value.keySet()){
@@ -201,17 +176,11 @@ public class ValueIterator{
                 // Calculate residual
                 residual = Math.max(residual, Math.abs(nextValue.get(str) - value.get(str)));
             }
-            System.out.println(residual);
             // Update value to next value
             value = (HashMap)nextValue.clone();
+            iteration_no++;
         }
 
         updatePolicy();
-    }
-
-    public static void main(String[] args){
-        ValueIterator v = new ValueIterator(0.7);
-        State s= new State();
-
     }
 }

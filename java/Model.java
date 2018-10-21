@@ -25,14 +25,13 @@ public class Model{
         State s = new State();
         s.hand = init_hand;
         Pair<Integer,Integer> p = new Pair<>(init_hand,target);
-        // System.out.println(s.stand());
         if(temp_dealer_prob.containsKey(p)){
             return temp_dealer_prob.get(p);
         }
 
         else if(init_hand == 37){
             if(target == 22){
-                System.out.println("vsvsv");
+                // System.out.println("vsvsv");
                temp_dealer_prob.put(p,1.0); 
             }
             else{
@@ -75,10 +74,10 @@ public class Model{
                 for(int k = 0; k < hands.size(); k++){
                     int hand = hands.get(k).getKey();
                     double probability = hands.get(k).getValue();
-                    System.out.println("Init hand: " + hand + " Target: " + i);
+                    // System.out.println("Init hand: " + hand + " Target: " + i);
                     if(hand >= 26 && hand <= 34){
                         hand = (hand-26)*2 + 1;
-                        System.out.println("Equivalent hand: " + hand + " Target: " + i);
+                        // System.out.println("Equivalent hand: " + hand + " Target: " + i);
                     }
                     prob += get_dealer_prob(hand,i)*probability;
                     
@@ -225,18 +224,5 @@ public class Model{
             reward += dealer_prob.get(new Pair(s.dealer_hand, i)) * rewardHelper(s, i);
 
         return reward;
-    }
-
-    public static void main(String[] args){
-        Model m = new Model(0.7);
-        State s = new State();
-        s.hand = 1; s.dealer_hand = 4;
-        // // System.out.println("HERE :");
-        // // Pair<Integer,Integer> p = new Pair<>(11,37);
-        // System.out.println("dbffd" + m.get_dealer_prob(37,21));
-        // for(int i = 17; i <= 23; i++){
-        //     Pair<Integer,Integer> p = new Pair<>(11,i);
-        //     System.out.println(i + " : " + m.dealer_prob.get(p));
-        // }
     }
 }
