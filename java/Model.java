@@ -110,7 +110,7 @@ public class Model{
             actions.add(SPLIT);
         }   
 
-        if(s.doubled == false){
+        if(s.doubled == false && s.ace_split == false){
             actions.add(HIT);
             actions.add(DD);
         }
