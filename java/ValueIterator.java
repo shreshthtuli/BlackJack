@@ -109,20 +109,36 @@ public class ValueIterator{
                     sPrime1 = next_States.get(j).getKey();
                     prob = next_States.get(i).getValue();
                     prob1 = next_States.get(j).getValue();
-                    val += (m.getReward(sPrime, a) + value.get(sPrime.to_string())
-                         + m.getReward(sPrime1, a) + value.get(sPrime1.to_string())) * prob * prob1;
+                    val += (value.get(sPrime.to_string())
+                         + value.get(sPrime1.to_string())) * prob * prob1;
+                    // if(sPrime.hand == 34 && sPrime1.hand == 34){
+                    //     val += (value.get(sPrime.to_string())
+                    //      + value.get(sPrime1.to_string())) * prob * prob1 * 0.5;
+                    // }
+                    // else if(sPrime.hand == 34){
+                    //     val += (value.get(sPrime.to_string())*0.5
+                    //          + value.get(sPrime1.to_string())) * prob * prob1;
+                    // }
+                    // else if(sPrime1.hand == 34){
+                    //     val += (value.get(sPrime.to_string())
+                    //      + value.get(sPrime1.to_string())*0.5) * prob * prob1;
+                    // }
+                    // else{
+                    //     val += (value.get(sPrime.to_string())
+                    //      + value.get(sPrime1.to_string())) * prob * prob1;
+                    // }
+
                 }
             }
             return val;
         }
-        
         // Iterate on all next states
         for(int j = 0; j < next_States.size(); j++){
             sPrime = next_States.get(j).getKey(); // s'
-            prob = next_States.get(j).getValue(); // T(s, pi(s), s')        
+            prob = next_States.get(j).getValue(); // T(s, pi(s), s')       
             // System.out.println(sPrime.to_string() + "  " + value.get(sPrime.to_string()));
             if(sPrime.hand != 0)    
-                val += prob * (m.getReward(sPrime, a) + value.get(sPrime.to_string()));
+                val += prob * (value.get(sPrime.to_string()));
             else
                 val += prob * m.getReward(sPrime, a);
         }
@@ -150,6 +166,9 @@ public class ValueIterator{
                 aMax = a;
             }
         }
+        // if(valMax > 5){
+        //     System.out.println(valMax + " " + s.hand + " " + s.dealer_hand);
+        // }
         return valMax;
     }
 
@@ -189,9 +208,11 @@ public class ValueIterator{
     {
         double residual = epsilon;
         HashMap <String, Double> nextValue = new HashMap<>(value);
-    
+        
+        int iters = 0;
         // Compute values till residual < epsilon
-        while(residual >= epsilon){
+        while(residual >= epsilon && iters <= 1000){
+            iters += 1;
             // Iterate over all states
             residual = 0;
             for(String str : value.keySet()){

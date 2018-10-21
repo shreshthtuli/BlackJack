@@ -32,7 +32,6 @@ public class Model{
 
         else if(init_hand == 37){
             if(target == 22){
-                System.out.println("vsvsv");
                temp_dealer_prob.put(p,1.0); 
             }
             else{
@@ -228,15 +227,28 @@ public class Model{
     }
 
     public static void main(String[] args){
-        Model m = new Model(0.7);
+        // Model m = new Model(1);
         State s = new State();
-        s.hand = 1; s.dealer_hand = 4;
-        // // System.out.println("HERE :");
-        // // Pair<Integer,Integer> p = new Pair<>(11,37);
-        // System.out.println("dbffd" + m.get_dealer_prob(37,21));
-        // for(int i = 17; i <= 23; i++){
-        //     Pair<Integer,Integer> p = new Pair<>(11,i);
-        //     System.out.println(i + " : " + m.dealer_prob.get(p));
+        // s.hand = 34; s.dealer_hand = 4;
+        // ArrayList<Integer> action = m.legalAction(s);
+        // ArrayList<Pair<State, Double>> next = m.nextStates(s,2);
+        // for(int i = 0; i < next.size(); i++){
+        //     System.out.println(next.get(i).getKey().hand + " " + next.get(i).getValue());
+        // }
+        // System.out.println("SHKFJK " + action.size());
+        // // // System.out.println("HERE :");
+        // // // Pair<Integer,Integer> p = new Pair<>(11,37);
+        // // System.out.println("dbffd" + m.get_dealer_prob(37,21));
+
+        // for(int j = 2; j <= 11; j++){
+        //     double sum = 0;
+        //     for(int i = 17; i <= 23; i++){
+        //         Pair<Integer,Integer> p = new Pair<>(j,i);
+        //         double p1 =  m.dealer_prob.get(p);
+        //         sum += p1;
+        //         System.out.println(i + " : " + p1);
+        //     }
+        //     System.out.println(j + " " + sum +  "\n");
         // }
     }
 }
