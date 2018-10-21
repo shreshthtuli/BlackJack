@@ -194,7 +194,7 @@ public class Model{
         // Check blackjack
         if(blackjack && dealer_sum == 22)
             return 0;
-        else if(blackjack && dealer_sum != 21)
+        else if(blackjack && dealer_sum != 22)
             return 1.5 * bet;
 
         // Check busted
@@ -208,9 +208,6 @@ public class Model{
             return -bet;
         if(my_sum > dealer_sum)
             return +bet;
-
-        if(dealer_sum == 21 && !blackjack)
-            return -bet;
         
         // Equal values
         return 0;

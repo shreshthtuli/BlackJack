@@ -27,7 +27,7 @@ public class ValueIterator{
 
     void print_policy(){
         for(int i = 2; i <= 35; i++){
-            if(i == 20)
+            if(i == 17)
                 continue;
             System.out.print(convert[i] + "\t");
             for(int j = 2; j <= 11; j++){
@@ -118,7 +118,7 @@ public class ValueIterator{
         for(int i = 0; i < actions.size(); i++){
             a = actions.get(i);
             val = this.qStar(s, a);
-            if(val > valMax){
+            if(val >= valMax){
                 valMax = val;
                 aMax = a;
             }
