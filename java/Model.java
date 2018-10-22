@@ -106,7 +106,7 @@ public class Model{
             return actions;
         }
 
-        if(s.hand >= 26 && s.hand <= 35 && s.ace_split == false){
+        if(s.hand >= 26 && s.hand <= 35 && s.ace_split == false && s.doubled == false){
             actions.add(SPLIT);
         }   
 
@@ -189,7 +189,7 @@ public class Model{
     double rewardHelper(State s, int dealer_sum){
         int my_sum = s.stand();
         boolean blackjack = (s.hand == 37);
-        int bet = (s.doubled) ? 2 : 1;
+        double bet = (s.doubled) ? 2.0 : 1.0;
 
         // Check blackjack
         if(blackjack && dealer_sum == 22)

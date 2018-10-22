@@ -148,7 +148,7 @@ public class ValueIterator{
             for(int i = 0; i < actions.size(); i++){
                 a = actions.get(i);
                 val = qStar(s, a);
-                if(val >= valMax){
+                if(val > valMax){
                     valMax = val;
                     aMax = a;
                 }
