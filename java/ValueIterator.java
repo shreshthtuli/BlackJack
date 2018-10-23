@@ -8,7 +8,7 @@ import javafx.util.Pair;
 
 public class ValueIterator{
 
-    static double epsilon = 0.00000000002;
+    static double epsilon = 0.0000002;
     HashMap <String, Double> value;
     HashMap <String, Integer> policy;
     ArrayList<State> allStates;
@@ -64,6 +64,25 @@ public class ValueIterator{
                 value.put(newState.to_string(), 0.0);
 
                 newState.doubled = true;
+                value.put(newState.to_string(), 0.0);
+
+                newState = new State();
+                newState.hand = i;
+                newState.dealer_hand = j;
+                newState.initial = false;
+                value.put(newState.to_string(), 0.0);
+
+                newState.doubled = true;
+                newState.initial = false;
+                value.put(newState.to_string(), 0.0);
+
+                newState.doubled = false;
+                newState.ace_split = true;
+                newState.initial = false;
+                value.put(newState.to_string(), 0.0);
+
+                newState.doubled = true;
+                newState.initial = false;
                 value.put(newState.to_string(), 0.0);
             }
         }
@@ -165,7 +184,7 @@ public class ValueIterator{
         int iteration_no = 0;
     
         // Compute values till residual < epsilon
-        while(residual >= epsilon && iteration_no < 500){
+        while(residual >= epsilon && iteration_no < 3000){
             // Iterate over all states
             residual = 0;
             for(String str : value.keySet()){

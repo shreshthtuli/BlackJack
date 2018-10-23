@@ -8,6 +8,7 @@ public class State{
 	int dealer_hand;
 	boolean doubled;
 	boolean ace_split;
+	boolean initial;
 
 	// Integer -1 for not set
 	// Integer 0 for bust
@@ -22,6 +23,7 @@ public class State{
 		this.dealer_hand = -1;
 		this.doubled = false;
 		this.ace_split = false;
+		this.initial = true;
 	}
 
 	State(State s){
@@ -29,18 +31,20 @@ public class State{
 		this.dealer_hand = s.dealer_hand;
 		this.doubled = s.doubled;
 		this.ace_split = s.ace_split;
+		this.initial = s.initial;
 	}
 
 	State(String str){
-		String[] arrOfStr = str.split(",", 4); 
+		String[] arrOfStr = str.split(",", 5); 
 		this.hand = Integer.parseInt(arrOfStr[0]);
 		this.dealer_hand = Integer.parseInt(arrOfStr[1]);
 		this.doubled = Boolean.parseBoolean(arrOfStr[2]);
 		this.ace_split = Boolean.parseBoolean(arrOfStr[3]);
+		this.initial = Boolean.parseBoolean(arrOfStr[4]);
 	}
 
 	String to_string(){
-		String str = this.hand + "," + this.dealer_hand + "," + this.doubled + "," + this.ace_split;
+		String str = this.hand + "," + this.dealer_hand + "," + this.doubled + "," + this.ace_split + "," + this.initial;
 		return str;
 	}
 
@@ -64,11 +68,13 @@ public class State{
 	}
 
 	void double_down(int card){
+		this.initial = false;
 		this.doubled = true;
 		this.hit(card);
 	}
 
 	void hit(int card){
+		this.initial = false;
 		int cur_hand = this.hand;
 		if(card == 11){
 			if(cur_hand <= 6){
@@ -169,6 +175,7 @@ public class State{
 	}
 
 	void split(int card){
+		this.initial = true;
 		int cur_card = this.hand - 24;
 		if(cur_card == 11){
 			this.ace_split = true;

@@ -112,7 +112,9 @@ public class Model{
 
         if(s.doubled == false && s.ace_split == false){
             actions.add(HIT);
-            actions.add(DD);
+            if(s.initial){
+                actions.add(DD);
+            }
         }
         
         actions.add(STAND);
