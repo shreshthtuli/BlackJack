@@ -1,2 +1,2 @@
 # BlackJack
-MDP based BlockJack player
+MDP based BlackJack player
