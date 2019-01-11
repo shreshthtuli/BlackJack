@@ -91,40 +91,40 @@ The output format is very close to the policy in the link. The first value in a 
 from 5 to 19. Then we have special cases, first when one of the cards is an ace, A2 to A9 and finally pairs,
 22 to 1010. After your hand there is a tab ‘\t’ and then there are 10 values for different open cards of
 the dealer (2 to 10 then ace). The letter will indicate your first action if you get this hand. Here is a
-sample output:
+sample output:<br>
 5 H H H H H H H H H H <br>
-6 H H H H H H H H H H
-7 H H H H H H H H H H
-8 H H H H H H H H H H
-9 H D D D D H H H H H
-10 D D D D D D D D H H
-11 D D D D D D D D H H
-12 H H S S S H H H H H
-13 S S S S S H H H H H
-14 S S S S S H H H H H
-15 S S S S S H H H H H
-16 S S S S S H H H H H
-17 S S S S S S S S S S
-18 S S S S S S S S S S
-19 S S S S S S S S S S
-A2 H H H H D H H H H H
-A3 H H H D D H H H H H
-A4 H H H D D H H H H H
-A5 H H D D D H H H H H
-A6 H D D D D H H H H H
-A7 S D D D D S S H H H
-A8 S S S S S S S S S S
-A9 S S S S S S S S S S
-22 P P P P P P H H H H
-33 P P P P P P H H H H 
-44 H H H P P H H H H H
-55 D D D D D D D D H H
-66 P P P P P H H H H H
-77 P P P P P P H H H H
-88 P P P P P P P P H H
-99 P P P P P S P P S S
-1010 S S S S S S S S S S
-AA P P P P P P P P P H
+6 H H H H H H H H H H<br>
+7 H H H H H H H H H H<br>
+8 H H H H H H H H H H<br>
+9 H D D D D H H H H H<br>
+10 D D D D D D D D H H<br>
+11 D D D D D D D D H H<br>
+12 H H S S S H H H H H<br>
+13 S S S S S H H H H H<br>
+14 S S S S S H H H H H<br>
+15 S S S S S H H H H H<br>
+16 S S S S S H H H H H<br>
+17 S S S S S S S S S S<br>
+18 S S S S S S S S S S<br>
+19 S S S S S S S S S S<br>
+A2 H H H H D H H H H H<br>
+A3 H H H D D H H H H H<br>
+A4 H H H D D H H H H H<br>
+A5 H H D D D H H H H H<br>
+A6 H D D D D H H H H H<br>
+A7 S D D D D S S H H H<br>
+A8 S S S S S S S S S S<br>
+A9 S S S S S S S S S S<br>
+22 P P P P P P H H H H<br>
+33 P P P P P P H H H H <br>
+44 H H H P P H H H H H<br>
+55 D D D D D D D D H H<br>
+66 P P P P P H H H H H<br>
+77 P P P P P P H H H H<br>
+88 P P P P P P P P H H<br>
+99 P P P P P S P P S S<br>
+1010 S S S S S S S S S S<br>
+AA P P P P P P P P P H<br>
 As an example, the table above suggests that if you get a pair of 5s and the dealer got a 9 then you
 should double.
 
