@@ -92,7 +92,7 @@ from 5 to 19. Then we have special cases, first when one of the cards is an ace,
 22 to 1010. After your hand there is a tab ‘\t’ and then there are 10 values for different open cards of
 the dealer (2 to 10 then ace). The letter will indicate your first action if you get this hand. Here is a
 sample output:
-5 H H H H H H H H H H
+5 H H H H H H H H H H <br>
 6 H H H H H H H H H H
 7 H H H H H H H H H H
 8 H H H H H H H H H H
